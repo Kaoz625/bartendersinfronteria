@@ -4,1127 +4,1116 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bartenders in Frontera — NYC Cocktail & Bar Services</title>
-  <meta name="description" content="Premium mobile bartending and cocktail services for events, weddings, private parties, and corporate gatherings in New York City.">
-  <meta property="og:title" content="Bartenders in Frontera — NYC">
-  <meta property="og:description" content="Liquid art. Crafted for your moment.">
-  <meta property="og:image" content="https://bartendersinfronteria.nyctailblazers.com/og-image.jpg">
+  <meta name="description" content="Premium mobile bartending and cocktail experiences for events, weddings, private parties, and corporate gatherings in New York City.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700;1,9..144,900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
   <style>
+    /* ── TOKENS ── */
     :root {
-      --black: #07070a;
-      --dark: #0d0d12;
-      --surface: #13131a;
-      --surface2: #1a1a24;
-      --gold: #c8972e;
-      --gold-light: #e8b84b;
-      --amber: #e85d3a;
-      --text: #f0ede8;
-      --muted: #7a7570;
-      --border: rgba(200,151,46,0.15);
+      --ink:       #0b0907;
+      --deep:      #0f0d0a;
+      --surface:   #181510;
+      --surface2:  #201c16;
+      --surface3:  #2a2520;
+      --gold:      #c8922a;
+      --gold-lt:   #e0a83a;
+      --ember:     #c94f2e;
+      --cream:     #f2ede4;
+      --cream-dim: #b8b2a8;
+      --muted:     #6b6358;
+      --border:    rgba(200,146,42,0.14);
+      --grain:     url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
     }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; font-size: 16px; }
-
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; font-size:16px; }
     body {
-      background: var(--black);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    /* ── PARTICLES CANVAS ── */
-    #particles {
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
+      background-image: var(--grain);
+      background-size: 128px 128px;
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
+      z-index: 1000;
+      opacity: 0.6;
+      mix-blend-mode: overlay;
     }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,146,42,0.5);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.2s ease-out, width 0.3s, height 0.3s;
+    }
+    @media (hover: none) { .cursor, .cursor-ring { display: none; } }
 
     /* ── NAV ── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 20px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: background 0.5s, backdrop-filter 0.5s;
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 28px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: padding 0.4s, background 0.4s, backdrop-filter 0.4s;
     }
-    nav.scrolled {
-      background: rgba(7,7,10,0.85);
-      backdrop-filter: blur(20px);
+    nav.stuck {
+      padding: 16px 48px;
+      background: rgba(11,9,7,0.88);
+      backdrop-filter: blur(24px) saturate(180%);
       border-bottom: 1px solid var(--border);
     }
     .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
       font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--gold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cream);
       text-decoration: none;
     }
-    .nav-logo span { color: var(--text); }
-    .nav-links {
-      display: flex;
-      gap: 36px;
-      list-style: none;
-    }
+    .nav-logo em { font-style: italic; color: var(--gold); }
+    .nav-links { display:flex; gap:40px; list-style:none; }
     .nav-links a {
       color: var(--muted);
       text-decoration: none;
-      font-size: 13px;
-      letter-spacing: 0.12em;
+      font-size: 12px;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       font-weight: 500;
-      transition: color 0.3s;
+      transition: color 0.25s;
     }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-cta {
+    .nav-links a:hover { color: var(--cream); }
+    .nav-book {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--ink) !important;
       background: var(--gold);
-      color: var(--black) !important;
-      padding: 10px 24px;
-      border-radius: 3px;
-      font-weight: 600 !important;
+      padding: 10px 22px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.25s;
     }
-    .nav-cta:hover { background: var(--gold-light) !important; color: var(--black) !important; }
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-    .nav-hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text);
-      transition: 0.3s;
-    }
+    .nav-book:hover { background: var(--gold-lt) !important; }
+    .nav-ham { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; }
+    .nav-ham span { display:block; width:24px; height:1.5px; background:var(--cream); transition:0.3s; }
 
     /* ── HERO ── */
     #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       position: relative;
-      height: 100vh;
-      min-height: 700px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
-      z-index: 1;
     }
-    .hero-bg {
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 64px 80px;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-right-bg {
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,151,46,0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 50% at 80% 60%, rgba(232,93,58,0.06) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(7,7,10,0) 0%, rgba(7,7,10,0.6) 60%, rgba(7,7,10,1) 100%);
+        radial-gradient(ellipse 70% 80% at 60% 40%, rgba(200,146,42,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 80% 70%, rgba(201,79,46,0.09) 0%, transparent 60%),
+        linear-gradient(160deg, var(--surface) 0%, var(--deep) 100%);
+    }
+    /* Diagonal rule line */
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--border) 30%, var(--border) 70%, transparent);
+    }
+    /* Glass circle behind cocktail art */
+    .hero-art {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 360px; height: 360px;
+      display: flex; align-items: center; justify-content: center;
       z-index: 1;
     }
-    .hero-grid {
+    .hero-art-ring {
       position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(200,151,46,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,151,46,0.04) 1px, transparent 1px);
-      background-size: 80px 80px;
-      z-index: 0;
+      border-radius: 50%;
+      animation: ringPulse 6s ease-in-out infinite;
     }
-    .hero-content {
+    .hero-art-ring.r1 {
+      width: 360px; height: 360px;
+      border: 1px solid rgba(200,146,42,0.12);
+      animation-delay: 0s;
+    }
+    .hero-art-ring.r2 {
+      width: 280px; height: 280px;
+      border: 1px solid rgba(200,146,42,0.2);
+      animation-delay: 1s;
+    }
+    .hero-art-ring.r3 {
+      width: 200px; height: 200px;
+      background: rgba(200,146,42,0.06);
+      border: 1px solid rgba(200,146,42,0.3);
+      animation-delay: 2s;
+    }
+    @keyframes ringPulse {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.04); opacity: 0.7; }
+    }
+    .hero-art-icon {
+      font-size: 80px;
+      line-height: 1;
       position: relative;
       z-index: 2;
-      text-align: center;
-      max-width: 900px;
-      padding: 0 24px;
+      filter: drop-shadow(0 0 40px rgba(200,146,42,0.25));
+      animation: iconFloat 4s ease-in-out infinite;
     }
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+    @keyframes iconFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* NYC tag floating */
+    .hero-tag {
+      position: absolute;
+      top: 30%;
+      right: 10%;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 2;
+    }
+    .hero-year {
+      position: absolute;
+      bottom: 80px;
+      left: 48px;
+      font-family: 'Fraunces', serif;
       font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 28px;
+      margin-bottom: 32px;
       opacity: 0;
     }
-    .hero-eyebrow::before, .hero-eyebrow::after {
+    .hero-eyebrow::after {
       content: '';
-      display: block;
-      width: 32px;
+      flex: 1;
+      max-width: 60px;
       height: 1px;
       background: var(--gold);
     }
     .hero-h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(48px, 8vw, 96px);
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-size: clamp(56px, 7vw, 96px);
       font-weight: 900;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      margin-bottom: 24px;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 32px;
       opacity: 0;
     }
+    .hero-h1 .line { display: block; overflow: hidden; }
+    .hero-h1 .line span { display: block; }
     .hero-h1 em {
       font-style: italic;
-      background: linear-gradient(135deg, var(--gold), var(--amber));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero-sub {
-      font-size: clamp(16px, 2vw, 20px);
-      color: var(--muted);
+      color: var(--gold);
       font-weight: 300;
-      line-height: 1.6;
-      max-width: 560px;
-      margin: 0 auto 40px;
+    }
+    .hero-desc {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 400px;
+      margin-bottom: 40px;
+      font-weight: 300;
       opacity: 0;
     }
-    .hero-actions {
+    .hero-ctas {
       display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 24px;
       opacity: 0;
     }
-    .btn-primary {
+    .btn-gold {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       background: var(--gold);
-      color: var(--black);
+      color: var(--ink);
       font-weight: 600;
-      font-size: 14px;
-      letter-spacing: 0.06em;
-      padding: 16px 36px;
-      border-radius: 3px;
-      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      transition: background 0.3s, transform 0.2s;
+      padding: 16px 32px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
     }
-    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
-    .btn-outline {
+    .btn-gold:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .btn-ghost {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: transparent;
-      color: var(--text);
-      font-weight: 500;
-      font-size: 14px;
-      letter-spacing: 0.06em;
-      padding: 16px 36px;
-      border-radius: 3px;
-      border: 1px solid rgba(240,237,232,0.2);
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: border-color 0.3s, color 0.3s, transform 0.2s;
+      transition: color 0.25s, gap 0.25s;
     }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .btn-ghost:hover { color: var(--cream); gap: 12px; }
 
-    /* Scroll indicator */
-    .hero-scroll {
+    /* Scroll counter */
+    .hero-scroll-counter {
       position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 48px;
+      right: 48px;
       z-index: 2;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-end;
       gap: 8px;
-      opacity: 0;
     }
-    .hero-scroll span {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
+    .scroll-num {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+      color: rgba(200,146,42,0.12);
     }
     .scroll-line {
       width: 1px;
-      height: 48px;
+      height: 64px;
       background: linear-gradient(to bottom, var(--gold), transparent);
-      animation: scrollPulse 2s ease infinite;
+      margin: 0 auto;
+      animation: lineDown 2s ease infinite;
+      transform-origin: top;
     }
-    @keyframes scrollPulse {
-      0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
-      50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
-      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
-    }
-
-    /* Floating cocktail elements */
-    .float-el {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .float-el.a {
-      width: 400px; height: 400px;
-      background: rgba(200,151,46,0.06);
-      top: 20%; right: 10%;
-      animation: floatA 8s ease-in-out infinite;
-    }
-    .float-el.b {
-      width: 300px; height: 300px;
-      background: rgba(232,93,58,0.05);
-      bottom: 20%; left: 5%;
-      animation: floatB 10s ease-in-out infinite;
-    }
-    @keyframes floatA {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(30px, -40px) scale(1.1); }
-    }
-    @keyframes floatB {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(-20px, 30px) scale(0.9); }
+    @keyframes lineDown {
+      0% { transform: scaleY(0); opacity: 1; }
+      50% { transform: scaleY(1); opacity: 1; }
+      100% { transform: scaleY(1); opacity: 0; }
     }
 
-    /* ── MARQUEE ── */
-    .marquee-wrap {
+    /* ── TICKER ── */
+    .ticker {
       overflow: hidden;
-      padding: 24px 0;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      background: var(--gold);
+      padding: 14px 0;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
-    .marquee-track {
+    .ticker-track {
       display: flex;
-      gap: 48px;
+      gap: 0;
       white-space: nowrap;
-      animation: marqueeRoll 20s linear infinite;
+      animation: tick 18s linear infinite;
     }
-    .marquee-item {
+    .ticker-item {
       display: inline-flex;
       align-items: center;
-      gap: 16px;
+      gap: 0;
+      font-family: 'Fraunces', serif;
       font-size: 13px;
-      letter-spacing: 0.15em;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--muted);
-      flex-shrink: 0;
+      color: var(--ink);
+      padding: 0 32px;
     }
-    .marquee-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--gold);
+    .ticker-sep {
+      color: var(--ember);
+      margin: 0 8px;
     }
-    @keyframes marqueeRoll {
+    @keyframes tick {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
 
-    /* ── SECTION SHELL ── */
-    section { position: relative; z-index: 1; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
-    .section-pad { padding: 120px 0; }
+    /* ── CONTAINER ── */
+    .ctr { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+    .pad { padding: 120px 0; }
+    section { position: relative; }
 
-    .section-tag {
+    /* ── SECTION LABEL ── */
+    .s-label {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-size: 11px;
-      letter-spacing: 0.2em;
+      font-size: 10px;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
-    .section-tag::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--gold);
+    .s-label::before { content: ''; width: 20px; height: 1px; background: var(--gold); }
+
+    .s-h2 {
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
     }
-    .section-h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 5vw, 60px);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: 20px;
-    }
-    .section-h2 em {
-      font-style: italic;
-      color: var(--gold);
-    }
-    .section-lead {
-      font-size: 18px;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 560px;
-    }
+    .s-h2 em { font-style: italic; color: var(--gold); font-weight: 300; }
+    .s-body { font-size: 17px; color: var(--muted); line-height: 1.75; font-weight: 300; }
 
     /* ── ABOUT ── */
-    #about { background: var(--dark); }
-    .about-grid {
+    #about { background: var(--deep); }
+    .about-wrap {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 0;
+      align-items: stretch;
     }
-    .about-visual {
-      position: relative;
+    .about-left {
+      padding: 120px 80px 120px 0;
+      border-right: 1px solid var(--border);
     }
-    .about-frame {
-      aspect-ratio: 4/5;
-      background: var(--surface);
-      border-radius: 4px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .about-right {
+      padding: 120px 0 120px 80px;
     }
-    .about-frame-inner {
-      width: 100%;
-      height: 100%;
-      background:
-        radial-gradient(ellipse at 30% 70%, rgba(200,151,46,0.15) 0%, transparent 60%),
-        radial-gradient(ellipse at 70% 30%, rgba(232,93,58,0.1) 0%, transparent 60%),
-        var(--surface);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-    .about-icon {
-      font-size: 64px;
+    .about-big-num {
+      font-family: 'Fraunces', serif;
+      font-size: 160px;
+      font-weight: 900;
       line-height: 1;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(200,146,42,0.2);
+      margin-bottom: 24px;
+      display: block;
     }
-    .about-frame-label {
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .about-badge {
-      position: absolute;
-      bottom: -24px;
-      right: -24px;
-      background: var(--gold);
-      color: var(--black);
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 13px;
-      text-align: center;
-      line-height: 1.3;
-      box-shadow: 0 20px 60px rgba(200,151,46,0.3);
-    }
-    .about-badge strong { font-size: 28px; display: block; font-family: 'Playfair Display', serif; }
-    .about-stats {
+    .about-stats-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 40px;
-    }
-    .stat-card {
-      background: var(--surface);
+      gap: 1px;
+      background: var(--border);
+      margin-top: 48px;
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 24px;
     }
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 40px;
-      font-weight: 700;
+    .stat-box {
+      background: var(--deep);
+      padding: 32px;
+    }
+    .stat-n {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      font-weight: 900;
       color: var(--gold);
       line-height: 1;
       margin-bottom: 6px;
     }
-    .stat-label { font-size: 13px; color: var(--muted); }
+    .stat-l { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .about-pull {
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.3;
+      color: var(--cream-dim);
+      margin-bottom: 40px;
+      letter-spacing: -0.01em;
+    }
+    .about-pull strong { font-weight: 900; font-style: normal; color: var(--cream); }
+    .about-body { font-size: 16px; color: var(--muted); line-height: 1.8; font-weight: 300; }
 
-    /* ── SERVICES ── */
-    #services { background: var(--black); }
-    .services-grid {
+    /* ── SERVICES BENTO ── */
+    #services { background: var(--ink); }
+    .bento-head {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 48px;
+    }
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 220px;
       gap: 2px;
       background: var(--border);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 60px;
     }
-    .service-card {
-      background: var(--dark);
-      padding: 48px 36px;
-      transition: background 0.4s;
+    .b-card {
+      background: var(--surface);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
       position: relative;
       overflow: hidden;
+      transition: background 0.35s;
+      cursor: default;
     }
-    .service-card::before {
+    .b-card:hover { background: var(--surface2); }
+    .b-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--gold), var(--amber));
+      height: 1.5px;
+      background: linear-gradient(90deg, var(--gold), var(--ember));
       transform: scaleX(0);
       transform-origin: left;
-      transition: transform 0.4s;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
     }
-    .service-card:hover { background: var(--surface); }
-    .service-card:hover::before { transform: scaleX(1); }
-    .service-icon {
-      font-size: 40px;
-      margin-bottom: 20px;
-      display: block;
+    .b-card:hover::before { transform: scaleX(1); }
+
+    .b-card.c5 { grid-column: span 5; }
+    .b-card.c4 { grid-column: span 4; }
+    .b-card.c3 { grid-column: span 3; }
+    .b-card.c7 { grid-column: span 7; }
+    .b-card.c8 { grid-column: span 8; }
+    .b-card.r2 { grid-row: span 2; }
+
+    .b-num {
+      position: absolute;
+      top: 24px; right: 28px;
+      font-family: 'Fraunces', serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
     }
-    .service-title {
-      font-family: 'Playfair Display', serif;
+    .b-icon { font-size: 36px; margin-bottom: 16px; }
+    .b-title {
+      font-family: 'Fraunces', serif;
       font-size: 22px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
     }
-    .service-desc {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
-    .service-link {
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: gap 0.3s;
-    }
-    .service-link:hover { gap: 10px; }
+    .b-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
 
-    /* ── SIGNATURE DRINKS ── */
-    #cocktails { background: var(--dark); }
-    .cocktails-intro {
+    /* Featured card (large) */
+    .b-card.featured {
+      background:
+        radial-gradient(ellipse 80% 80% at 30% 70%, rgba(200,146,42,0.1) 0%, transparent 60%),
+        var(--surface);
+    }
+    .b-card.featured .b-title { font-size: 28px; }
+
+    /* ── COCKTAILS — HORIZONTAL ZIG-ZAG ── */
+    #cocktails { background: var(--deep); }
+    .cocktails-head {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      gap: 48px;
       align-items: end;
       margin-bottom: 64px;
     }
-    .cocktails-grid {
+    .cocktail-list { display: flex; flex-direction: column; gap: 2px; }
+    .cocktail-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    .cocktail-card {
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      gap: 32px;
+      padding: 28px 40px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
+      transition: background 0.3s, border-color 0.3s;
+      cursor: default;
     }
-    .cocktail-card:hover { transform: translateY(-8px); border-color: rgba(200,151,46,0.4); }
-    .cocktail-visual {
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 72px;
-      position: relative;
-      overflow: hidden;
+    .cocktail-row:hover {
+      background: var(--surface2);
+      border-color: rgba(200,146,42,0.3);
     }
-    .cocktail-visual::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, var(--surface) 100%);
+    .c-num {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(200,146,42,0.3);
+      line-height: 1;
     }
-    .cocktail-info { padding: 20px; }
-    .cocktail-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .cocktail-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-    /* ── SOCIAL PROOF / GALLERY ── */
-    #social { background: var(--black); }
-    .social-intro {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-    .social-intro .section-tag { justify-content: center; }
-    .social-intro .section-tag::before { display: none; }
-    .social-intro .section-tag::after {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--gold);
-    }
-    .social-platforms {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 48px;
-    }
-    .platform-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 28px;
-      border-radius: 3px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: transform 0.2s, opacity 0.2s;
-      border: 1px solid var(--border);
-      color: var(--text);
-      background: var(--surface);
-    }
-    .platform-btn:hover { transform: translateY(-2px); border-color: var(--gold); }
-    .platform-btn svg { width: 18px; height: 18px; }
-
-    /* TikTok embed strip */
-    .social-embed-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .embed-placeholder {
-      aspect-ratio: 9/16;
-      background: var(--surface);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      transition: background 0.3s;
-      text-decoration: none;
-      color: var(--text);
-    }
-    .embed-placeholder:hover { background: var(--surface2); }
-    .embed-icon { font-size: 36px; opacity: 0.6; }
-    .embed-label {
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .embed-platform {
-      font-size: 11px;
+    .cocktail-row:hover .c-num {
+      -webkit-text-stroke-color: var(--gold);
       color: var(--gold);
     }
-
-    /* ── PROCESS ── */
-    #process { background: var(--dark); }
-    .process-steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      margin-top: 60px;
-      position: relative;
-    }
-    .process-steps::before {
-      content: '';
-      position: absolute;
-      top: 32px;
-      left: 10%;
-      right: 10%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    }
-    .process-step {
-      padding: 0 24px;
-      text-align: center;
-    }
-    .step-num {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 1px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
+    .c-info {}
+    .c-name {
+      font-family: 'Fraunces', serif;
       font-size: 24px;
       font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .c-desc { font-size: 13px; color: var(--muted); font-weight: 300; }
+    .c-tag {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
       color: var(--gold);
-      margin: 0 auto 24px;
-      position: relative;
-      z-index: 1;
-    }
-    .step-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .step-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
-
-    /* ── TESTIMONIALS ── */
-    #testimonials { background: var(--black); }
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-top: 60px;
-    }
-    .testimonial-card {
-      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 36px;
-      position: relative;
+      padding: 6px 14px;
+      white-space: nowrap;
     }
-    .testimonial-card::before {
-      content: '"';
-      position: absolute;
-      top: 20px;
-      right: 24px;
-      font-family: 'Playfair Display', serif;
-      font-size: 80px;
-      line-height: 1;
-      color: rgba(200,151,46,0.12);
-      font-weight: 900;
-    }
-    .stars {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 16px;
-    }
-    .star { color: var(--gold); font-size: 14px; }
-    .testimonial-text {
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 24px;
-      font-style: italic;
-    }
-    .testimonial-author {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .author-avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-    .author-name { font-size: 14px; font-weight: 600; }
-    .author-event { font-size: 12px; color: var(--muted); }
 
-    /* ── CTA BANNER ── */
-    #cta {
-      background:
-        radial-gradient(ellipse 80% 80% at 50% 50%, rgba(200,151,46,0.12) 0%, transparent 70%),
-        var(--dark);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .cta-inner {
-      text-align: center;
-      padding: 100px 0;
-    }
-    .cta-h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 5vw, 64px);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-    .cta-h2 em {
-      font-style: italic;
-      background: linear-gradient(135deg, var(--gold), var(--amber));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .cta-sub {
-      font-size: 18px;
-      color: var(--muted);
-      margin-bottom: 40px;
-    }
-    .cta-contact-row {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      flex-wrap: wrap;
-      margin-top: 40px;
-    }
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .contact-item:hover { color: var(--gold); }
-    .contact-item-icon { font-size: 18px; }
-
-    /* ── CONTACT ── */
-    #contact { background: var(--black); }
-    .contact-grid {
+    /* ── SOCIAL ── */
+    #social { background: var(--ink); }
+    .social-wrap {
       display: grid;
-      grid-template-columns: 1fr 1.2fr;
+      grid-template-columns: 1fr 1fr;
       gap: 80px;
       align-items: start;
     }
-    .contact-info-list {
-      list-style: none;
+    .social-platforms-list {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      margin-top: 36px;
+      gap: 2px;
+      margin-top: 40px;
     }
-    .contact-info-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-    .contact-info-icon {
-      width: 44px; height: 44px;
-      flex-shrink: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 50%;
+    .platform-row {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-    .contact-info-text a {
-      color: var(--text);
+      justify-content: space-between;
+      padding: 24px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
       text-decoration: none;
-      transition: color 0.3s;
+      color: var(--cream);
+      transition: background 0.3s, border-color 0.3s, transform 0.2s;
     }
-    .contact-info-text a:hover { color: var(--gold); }
-    .contact-info-label {
+    .platform-row:hover {
+      background: var(--surface2);
+      border-color: rgba(200,146,42,0.35);
+      transform: translateX(6px);
+    }
+    .pl-left { display: flex; align-items: center; gap: 16px; }
+    .pl-icon { font-size: 20px; }
+    .pl-name { font-size: 15px; font-weight: 500; letter-spacing: 0.02em; }
+    .pl-handle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .pl-arrow { color: var(--gold); font-size: 18px; transition: transform 0.25s; }
+    .platform-row:hover .pl-arrow { transform: translateX(4px); }
+    .social-visual {
+      position: sticky;
+      top: 120px;
+    }
+    .social-frame {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .social-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,146,42,0.08) 0%, transparent 70%);
+    }
+    .social-big-icon { font-size: 80px; }
+    .social-frame-label {
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--muted);
+    }
+    .social-frame-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       font-size: 11px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .contact-form {
-      background: var(--surface);
+      color: var(--gold);
+      text-decoration: none;
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 48px;
+      padding: 10px 20px;
+      transition: background 0.25s;
     }
-    .form-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 32px;
-    }
-    .form-row {
+    .social-frame-cta:hover { background: rgba(200,146,42,0.08); }
+
+    /* ── PROCESS ── */
+    #process { background: var(--deep); }
+    .process-wrap {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 80px;
+      align-items: start;
     }
-    .form-group {
+    .process-left {
+      position: sticky;
+      top: 120px;
+    }
+    .process-steps { display: flex; flex-direction: column; gap: 2px; }
+    .p-step {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 24px;
+      align-items: start;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0.4;
+      transition: opacity 0.3s;
+    }
+    .p-step:last-child { border-bottom: none; }
+    .p-step.active { opacity: 1; }
+    .p-n {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--gold);
+    }
+    .p-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .p-desc { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--ink); }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 60px;
+    }
+    .testi-card {
+      background: var(--surface);
+      padding: 56px;
+      position: relative;
+    }
+    .testi-quote {
+      position: absolute;
+      top: 32px; right: 40px;
+      font-family: 'Fraunces', serif;
+      font-size: 120px;
+      font-weight: 900;
+      line-height: 1;
+      color: rgba(200,146,42,0.07);
+    }
+    .testi-stars { margin-bottom: 24px; color: var(--gold); letter-spacing: 2px; font-size: 13px; }
+    .testi-text {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--cream-dim);
+      margin-bottom: 32px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 14px; }
+    .testi-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .testi-name { font-size: 14px; font-weight: 600; }
+    .testi-event { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    /* Wide third testimonial */
+    .testi-card.wide { grid-column: span 2; background: var(--deep); }
+
+    /* ── CTA ── */
+    #cta {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .cta-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 100% at 50% 50%, rgba(200,146,42,0.1) 0%, transparent 70%);
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      padding: 120px 0;
+      text-align: center;
+    }
+    .cta-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .cta-h2 {
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+      margin-bottom: 20px;
+    }
+    .cta-h2 em { font-style: italic; color: var(--gold); font-weight: 300; }
+    .cta-sub { font-size: 17px; color: var(--muted); margin-bottom: 48px; font-weight: 300; }
+    .cta-contact {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .cta-contact a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+    .cta-contact a:hover { color: var(--gold); }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--ink); }
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-info { padding-top: 8px; }
+    .contact-detail-list {
+      list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
+      gap: 0;
+      margin-top: 40px;
     }
-    .form-group.full { grid-column: span 2; }
-    label {
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
+    .cd-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
     }
+    .cd-icon {
+      width: 40px; height: 40px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .cd-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .cd-val { font-size: 15px; }
+    .cd-val a { color: var(--cream); text-decoration: none; transition: color 0.25s; }
+    .cd-val a:hover { color: var(--gold); }
+    .contact-form-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 56px;
+    }
+    .form-h { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; margin-bottom: 40px; }
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .f-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .f-group.full { grid-column: 1/-1; }
+    .f-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
     input, select, textarea {
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 3px;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
+      color: var(--cream);
+      font-family: 'Outfit', sans-serif;
       font-size: 15px;
-      padding: 14px 16px;
+      font-weight: 300;
+      padding: 14px 18px;
       outline: none;
-      transition: border-color 0.3s;
+      border-radius: 0;
       width: 100%;
+      transition: border-color 0.25s;
+      -webkit-appearance: none;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--gold);
-    }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); }
     select option { background: var(--surface2); }
-    textarea { resize: vertical; min-height: 120px; }
-    .form-submit {
+    textarea { resize: vertical; min-height: 110px; }
+    .f-submit {
       width: 100%;
       background: var(--gold);
-      color: var(--black);
+      color: var(--ink);
       border: none;
-      border-radius: 3px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       padding: 18px;
       cursor: pointer;
       margin-top: 8px;
-      transition: background 0.3s, transform 0.2s;
+      transition: background 0.25s;
     }
-    .form-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .f-submit:hover { background: var(--gold-lt); }
 
     /* ── FOOTER ── */
-    footer {
-      background: var(--dark);
-      border-top: 1px solid var(--border);
-      padding: 60px 0 32px;
-    }
-    .footer-grid {
+    footer { background: var(--deep); border-top: 1px solid var(--border); }
+    .foot-top {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
       gap: 48px;
-      margin-bottom: 48px;
+      padding: 72px 0 48px;
+      border-bottom: 1px solid var(--border);
     }
-    .footer-brand h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--gold);
+    .foot-brand-name {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
       margin-bottom: 12px;
+      color: var(--cream);
     }
-    .footer-brand p {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 280px;
-    }
-    .footer-col h4 {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col ul a {
-      font-size: 14px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .footer-col ul a:hover { color: var(--gold); }
-    .footer-socials {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-    }
-    .social-icon {
-      width: 40px; height: 40px;
-      border-radius: 50%;
+    .foot-brand-name em { font-style: italic; color: var(--gold); }
+    .foot-brand-desc { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; max-width: 280px; }
+    .foot-socials { display: flex; gap: 10px; margin-top: 24px; }
+    .foot-social {
+      width: 36px; height: 36px;
       background: var(--surface);
       border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
       text-decoration: none;
-      transition: border-color 0.3s, background 0.3s, transform 0.2s;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
     }
-    .social-icon:hover {
-      border-color: var(--gold);
-      background: rgba(200,151,46,0.1);
-      transform: translateY(-2px);
-    }
-    .footer-bottom {
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
+    .foot-social:hover { border-color: var(--gold); background: rgba(200,146,42,0.08); transform: translateY(-2px); }
+    .foot-col h4 { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .foot-col ul a { font-size: 14px; color: var(--muted); text-decoration: none; font-weight: 300; transition: color 0.25s; }
+    .foot-col ul a:hover { color: var(--gold); }
+    .foot-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 24px 0;
       flex-wrap: wrap;
       gap: 12px;
     }
-    .footer-bottom p { font-size: 13px; color: var(--muted); }
-    .footer-bottom a { color: var(--gold); text-decoration: none; }
+    .foot-bottom p { font-size: 12px; color: var(--muted); }
+    .foot-bottom a { color: var(--gold); text-decoration: none; }
 
-    /* ── REVEAL ANIMATIONS ── */
-    .reveal { opacity: 0; transform: translateY(40px); }
-    .reveal.visible {
-      animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    @keyframes revealUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* ── REVEAL ── */
+    .rev { opacity: 0; transform: translateY(36px); }
+    .rev.in { animation: revIn 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes revIn { to { opacity: 1; transform: translateY(0); } }
+
+    .rev-l { opacity: 0; transform: translateX(-40px); }
+    .rev-l.in { animation: revL 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes revL { to { opacity: 1; transform: translateX(0); } }
+
+    .rev-r { opacity: 0; transform: translateX(40px); }
+    .rev-r.in { animation: revR 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes revR { to { opacity: 1; transform: translateX(0); } }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .about-grid { grid-template-columns: 1fr; gap: 48px; }
-      .services-grid { grid-template-columns: 1fr 1fr; }
-      .cocktails-grid { grid-template-columns: repeat(2, 1fr); }
-      .social-embed-strip { grid-template-columns: repeat(2, 1fr); }
-      .process-steps { grid-template-columns: repeat(2, 1fr); gap: 40px; }
-      .process-steps::before { display: none; }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-      .cocktails-intro { grid-template-columns: 1fr; gap: 24px; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 140px 48px 80px; }
+      .about-wrap, .about-left { border-right: none; }
+      .about-wrap { grid-template-columns: 1fr; }
+      .about-left { padding: 80px 0 40px; }
+      .about-right { padding: 0 0 80px; }
+      .bento-head, .cocktails-head, .social-wrap, .process-wrap, .contact-wrap { grid-template-columns: 1fr; }
+      .foot-top { grid-template-columns: 1fr 1fr; }
+      .b-card.c5, .b-card.c4, .b-card.c3, .b-card.c7, .b-card.c8 { grid-column: span 6; }
     }
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
-      .nav-hamburger { display: flex; }
-      .container { padding: 0 24px; }
-      .section-pad { padding: 80px 0; }
-      .services-grid { grid-template-columns: 1fr; }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
-      .form-row { grid-template-columns: 1fr; }
-      .form-group.full { grid-column: span 1; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .about-badge { right: 0; }
-    }
-    @media (max-width: 480px) {
-      .cocktails-grid { grid-template-columns: 1fr; }
-      .social-embed-strip { grid-template-columns: 1fr 1fr; }
+      .nav-ham { display: flex; }
+      .ctr { padding: 0 24px; }
+      .pad { padding: 80px 0; }
+      .hero-left { padding: 120px 24px 60px; }
+      .b-card.c5, .b-card.c4, .b-card.c3, .b-card.c7, .b-card.c8 { grid-column: span 12; }
+      .b-card.r2 { grid-row: span 1; }
+      .bento { grid-auto-rows: 200px; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .testi-card.wide { grid-column: span 1; }
+      .foot-top { grid-template-columns: 1fr; }
+      .f-row { grid-template-columns: 1fr; }
+      .contact-form-wrap { padding: 32px 24px; }
+      .cta-contact { gap: 20px; }
+      .social-visual { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- Ambient Particles -->
-<canvas id="particles"></canvas>
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
 <!-- ── NAV ── -->
 <nav id="nav">
-  <a href="#" class="nav-logo">Bartenders<span>inFrontera</span></a>
+  <a href="#" class="nav-logo">Bartenders<em>in</em>Frontera</a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#cocktails">Menu</a></li>
-    <li><a href="#social">Gallery</a></li>
-    <li><a href="#contact" class="nav-cta">Book Now</a></li>
+    <li><a href="#social">Follow</a></li>
+    <li><a href="#contact" class="nav-book">Book Now</a></li>
   </ul>
-  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+  <button class="nav-ham" id="ham" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-grid"></div>
-  <div class="float-el a"></div>
-  <div class="float-el b"></div>
-  <div class="hero-bg"></div>
-
-  <div class="hero-content">
-    <div class="hero-eyebrow" id="eyebrow">New York City's Premier Mobile Bar</div>
-    <h1 class="hero-h1" id="hero-h1">
-      Crafting<br><em>Liquid Art.</em><br>One Pour at a Time.
+  <div class="hero-left">
+    <div class="hero-eyebrow" id="ey">NYC Premium Mobile Bar</div>
+    <h1 class="hero-h1" id="hh1">
+      <span class="line"><span>Liquid</span></span>
+      <span class="line"><span><em>Art,</em></span></span>
+      <span class="line"><span>Crafted</span></span>
+      <span class="line"><span>for You.</span></span>
     </h1>
-    <p class="hero-sub" id="hero-sub">
-      Premium cocktail experiences for weddings, private parties, corporate events, and any occasion worth celebrating — across all five boroughs.
-    </p>
-    <div class="hero-actions" id="hero-actions">
-      <a href="#contact" class="btn-primary">Book Your Event ↗</a>
-      <a href="#social" class="btn-outline">See Our Work</a>
+    <p class="hero-desc" id="hdesc">Premium mobile bartending for weddings, private parties, corporate events, and every occasion worth celebrating — across all five boroughs.</p>
+    <div class="hero-ctas" id="hcta">
+      <a href="#contact" class="btn-gold">Book Your Event ↗</a>
+      <a href="#social" class="btn-ghost">See Our Work →</a>
     </div>
   </div>
 
-  <div class="hero-scroll" id="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
+  <div class="hero-right">
+    <div class="hero-right-bg"></div>
+    <div class="hero-art" id="hart">
+      <div class="hero-art-ring r1"></div>
+      <div class="hero-art-ring r2"></div>
+      <div class="hero-art-ring r3"></div>
+      <div class="hero-art-icon">🍸</div>
+    </div>
+    <div class="hero-tag">New York City</div>
+    <div class="hero-scroll-counter">
+      <div class="scroll-num">01</div>
+      <div class="scroll-line"></div>
+    </div>
   </div>
+  <div class="hero-year">Est. NYC</div>
 </section>
 
-<!-- ── MARQUEE ── -->
-<div class="marquee-wrap" aria-hidden="true">
-  <div class="marquee-track" id="marquee">
-    <span class="marquee-item"><span class="marquee-dot"></span>Weddings</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Corporate Events</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Private Parties</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Birthday Celebrations</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Bachelor & Bachelorette</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Rooftop Events</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Holiday Parties</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Anniversaries</span>
-    <!-- Duplicate for seamless loop -->
-    <span class="marquee-item"><span class="marquee-dot"></span>Weddings</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Corporate Events</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Private Parties</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Birthday Celebrations</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Bachelor & Bachelorette</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Rooftop Events</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Holiday Parties</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Anniversaries</span>
+<!-- ── TICKER ── -->
+<div class="ticker">
+  <div class="ticker-track" id="tick">
+    <span class="ticker-item">Weddings <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Private Parties <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Corporate Events <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Mobile Bar Setup <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Custom Cocktails <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Mixology Workshops <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Rooftop Events <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Birthdays <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Weddings <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Private Parties <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Corporate Events <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Mobile Bar Setup <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Custom Cocktails <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Mixology Workshops <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Rooftop Events <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Birthdays <span class="ticker-sep">✦</span></span>
   </div>
 </div>
 
 <!-- ── ABOUT ── -->
-<section id="about" class="section-pad">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-visual reveal">
-        <div class="about-frame">
-          <div class="about-frame-inner">
-            <div class="about-icon">🍹</div>
-            <div class="about-frame-label">Est. in New York City</div>
+<section id="about">
+  <div class="ctr">
+    <div class="about-wrap">
+      <div class="about-left">
+        <div class="s-label rev">Our Story</div>
+        <span class="about-big-num rev">BIF</span>
+        <div class="about-stats-row rev">
+          <div class="stat-box">
+            <div class="stat-n" data-target="500">0</div>
+            <div class="stat-l">Events Served</div>
           </div>
-        </div>
-        <div class="about-badge">
-          <strong>5★</strong>
-          Rated
+          <div class="stat-box">
+            <div class="stat-n" data-target="5000">0</div>
+            <div class="stat-l">Happy Guests</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-n" data-target="200">0</div>
+            <div class="stat-l">Signature Recipes</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-n" data-target="5">0</div>
+            <div class="stat-l">NYC Boroughs</div>
+          </div>
         </div>
       </div>
-      <div class="about-content">
-        <div class="section-tag reveal">Our Story</div>
-        <h2 class="section-h2 reveal">Where <em>Passion</em> Meets the Pour</h2>
-        <p class="section-lead reveal">
-          Bartenders in Frontera brings the art of mixology directly to your event. Born in New York City, we've built a reputation for crafting unforgettable cocktail experiences — from intimate gatherings to grand celebrations.
+      <div class="about-right">
+        <p class="about-pull rev-r">
+          Where <strong>precision</strong> meets passion — every pour tells a story.
         </p>
-        <p class="section-lead reveal" style="margin-top:16px; font-size:16px;">
-          Our team of skilled bartenders combines technical precision with creative flair, ensuring every drink tells a story and every guest leaves with a memory.
+        <p class="about-body rev-r">
+          Bartenders in Frontera was born from a love of craft and a relentless pursuit of the perfect cocktail experience. Based in New York City, we bring a full mobile bar operation directly to your event — equipped with premium spirits, fresh ingredients, and bartenders who treat every glass as a canvas.
         </p>
-        <div class="about-stats reveal">
-          <div class="stat-card">
-            <div class="stat-num">500+</div>
-            <div class="stat-label">Events Served</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num">5K+</div>
-            <div class="stat-label">Happy Guests</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num">200+</div>
-            <div class="stat-label">Signature Recipes</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num">5</div>
-            <div class="stat-label">NYC Boroughs</div>
-          </div>
+        <p class="about-body rev-r" style="margin-top:20px">
+          From intimate Brooklyn dinner parties to Manhattan rooftop galas, we've served thousands of guests and built a reputation that speaks through every sip.
+        </p>
+        <div style="display:flex; gap:16px; margin-top:40px;" class="rev-r">
+          <a href="#contact" class="btn-gold">Start Planning</a>
+          <a href="#social" class="btn-ghost">View Our Work →</a>
         </div>
       </div>
     </div>
@@ -1132,219 +1121,254 @@
 </section>
 
 <!-- ── SERVICES ── -->
-<section id="services" class="section-pad">
-  <div class="container">
-    <div class="section-tag reveal">What We Offer</div>
-    <h2 class="section-h2 reveal">Services <em>Crafted</em><br>for Every Occasion</h2>
-    <div class="services-grid">
-      <div class="service-card reveal">
-        <span class="service-icon">💍</span>
-        <h3 class="service-title">Wedding Bar Service</h3>
-        <p class="service-desc">Make your wedding day unforgettable with a fully staffed, customized bar experience tailored to your theme and taste.</p>
-        <a href="#contact" class="service-link">Book a Consultation →</a>
+<section id="services" class="pad">
+  <div class="ctr">
+    <div class="bento-head">
+      <div>
+        <div class="s-label rev">What We Do</div>
+        <h2 class="s-h2 rev">Services Built<br>for <em>Every</em> Moment</h2>
       </div>
-      <div class="service-card reveal">
-        <span class="service-icon">🎉</span>
-        <h3 class="service-title">Private Parties</h3>
-        <p class="service-desc">From birthday blowouts to anniversary dinners, we bring the bar to you — fully equipped and ready to impress.</p>
-        <a href="#contact" class="service-link">Get a Quote →</a>
+      <p class="s-body rev">We handle the bar so you can focus on the celebration. Every service is fully customized to your event.</p>
+    </div>
+    <div class="bento rev">
+      <div class="b-card c5 featured">
+        <div class="b-num">01</div>
+        <div class="b-icon">💍</div>
+        <div class="b-title">Wedding Bar Service</div>
+        <div class="b-desc">Full-service wedding bar with custom cocktail menu, signature drinks, and professional staff tailored to your theme.</div>
       </div>
-      <div class="service-card reveal">
-        <span class="service-icon">🏢</span>
-        <h3 class="service-title">Corporate Events</h3>
-        <p class="service-desc">Elevate your next company event or holiday party with professional bartenders who know how to work a room.</p>
-        <a href="#contact" class="service-link">Learn More →</a>
+      <div class="b-card c4">
+        <div class="b-num">02</div>
+        <div class="b-icon">🎉</div>
+        <div class="b-title">Private Parties</div>
+        <div class="b-desc">From intimate birthdays to grand celebrations — we bring the bar to you, fully equipped.</div>
       </div>
-      <div class="service-card reveal">
-        <span class="service-icon">🚐</span>
-        <h3 class="service-title">Mobile Bar Setup</h3>
-        <p class="service-desc">We bring a stunning mobile bar setup to any venue — indoor, outdoor, rooftop, or backyard.</p>
-        <a href="#contact" class="service-link">See Setup Options →</a>
+      <div class="b-card c3">
+        <div class="b-num">03</div>
+        <div class="b-icon">🏢</div>
+        <div class="b-title">Corporate</div>
+        <div class="b-desc">Elevate your next company event with professional bartenders who know how to work a room.</div>
       </div>
-      <div class="service-card reveal">
-        <span class="service-icon">🍸</span>
-        <h3 class="service-title">Custom Cocktail Menus</h3>
-        <p class="service-desc">Work with our mixologists to create a bespoke cocktail menu that reflects your event's unique personality.</p>
-        <a href="#contact" class="service-link">Design Your Menu →</a>
+      <div class="b-card c3">
+        <div class="b-num">04</div>
+        <div class="b-icon">🚐</div>
+        <div class="b-title">Mobile Bar</div>
+        <div class="b-desc">Stunning mobile bar setup delivered anywhere — indoor, outdoor, rooftop.</div>
       </div>
-      <div class="service-card reveal">
-        <span class="service-icon">🎓</span>
-        <h3 class="service-title">Bartending Workshops</h3>
-        <p class="service-desc">Interactive mixology classes for team building, bachelorette parties, or anyone looking to shake things up.</p>
-        <a href="#contact" class="service-link">Reserve a Class →</a>
+      <div class="b-card c5">
+        <div class="b-num">05</div>
+        <div class="b-icon">🍸</div>
+        <div class="b-title">Custom Cocktail Menus</div>
+        <div class="b-desc">Work with our mixologists to create a bespoke cocktail menu that reflects your event's unique personality and story.</div>
+      </div>
+      <div class="b-card c4">
+        <div class="b-num">06</div>
+        <div class="b-icon">🎓</div>
+        <div class="b-title">Mixology Workshops</div>
+        <div class="b-desc">Interactive cocktail classes — perfect for team building, bachelorette parties, or anyone looking to shake things up.</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── COCKTAILS ── -->
-<section id="cocktails" class="section-pad">
-  <div class="container">
-    <div class="cocktails-intro">
+<section id="cocktails" class="pad">
+  <div class="ctr">
+    <div class="cocktails-head">
       <div>
-        <div class="section-tag reveal">Signature Menu</div>
-        <h2 class="section-h2 reveal">Drinks That <em>Define</em><br>the Night</h2>
+        <div class="s-label rev">Signature Menu</div>
+        <h2 class="s-h2 rev">Drinks That<br><em>Define</em> the Night</h2>
       </div>
-      <p class="section-lead reveal">
-        Every cocktail is a composition. We source premium spirits, fresh ingredients, and seasonal flavors to create drinks that are as beautiful as they are delicious.
-      </p>
+      <p class="s-body rev">Every cocktail is a composition. Premium spirits, fresh ingredients, seasonal flavors — drinks as beautiful as they are delicious.</p>
     </div>
-    <div class="cocktails-grid">
-      <div class="cocktail-card reveal">
-        <div class="cocktail-visual" style="background: linear-gradient(135deg, #1a0a00, #3a1a00);">🥃</div>
-        <div class="cocktail-info">
-          <h3 class="cocktail-name">The Frontera Old Fashioned</h3>
-          <p class="cocktail-desc">Aged bourbon, house-made demerara syrup, Angostura bitters, orange peel</p>
+    <div class="cocktail-list rev">
+      <div class="cocktail-row">
+        <div class="c-num">01</div>
+        <div class="c-info">
+          <div class="c-name">The Frontera Old Fashioned</div>
+          <div class="c-desc">Aged bourbon · house-made demerara syrup · Angostura bitters · smoked orange peel</div>
         </div>
+        <div class="c-tag">Signature</div>
       </div>
-      <div class="cocktail-card reveal">
-        <div class="cocktail-visual" style="background: linear-gradient(135deg, #001a0a, #003a15);">🍹</div>
-        <div class="cocktail-info">
-          <h3 class="cocktail-name">Mango Jalapeño Margarita</h3>
-          <p class="cocktail-desc">Reposado tequila, fresh mango purée, jalapeño, lime, tajín rim</p>
+      <div class="cocktail-row">
+        <div class="c-num">02</div>
+        <div class="c-info">
+          <div class="c-name">Mango Jalapeño Margarita</div>
+          <div class="c-desc">Reposado tequila · fresh mango purée · jalapeño · lime · tajín rim</div>
         </div>
+        <div class="c-tag">Fan Favorite</div>
       </div>
-      <div class="cocktail-card reveal">
-        <div class="cocktail-visual" style="background: linear-gradient(135deg, #1a0018, #3a0035);">🍸</div>
-        <div class="cocktail-info">
-          <h3 class="cocktail-name">NYC Violet Spritz</h3>
-          <p class="cocktail-desc">Empress gin, elderflower, butterfly pea, prosecco, lemon</p>
+      <div class="cocktail-row">
+        <div class="c-num">03</div>
+        <div class="c-info">
+          <div class="c-name">NYC Violet Spritz</div>
+          <div class="c-desc">Empress gin · elderflower liqueur · butterfly pea flower · prosecco · lemon twist</div>
         </div>
+        <div class="c-tag">Wedding Pick</div>
       </div>
-      <div class="cocktail-card reveal">
-        <div class="cocktail-visual" style="background: linear-gradient(135deg, #0a1a1a, #003a38);">🧉</div>
-        <div class="cocktail-info">
-          <h3 class="cocktail-name">Coconut Mezcal Mule</h3>
-          <p class="cocktail-desc">Mezcal, coconut water, ginger beer, lime, fresh mint, coconut foam</p>
+      <div class="cocktail-row">
+        <div class="c-num">04</div>
+        <div class="c-info">
+          <div class="c-name">Coconut Mezcal Mule</div>
+          <div class="c-desc">Mezcal · coconut water · ginger beer · lime · fresh mint · coconut foam</div>
         </div>
+        <div class="c-tag">Seasonal</div>
+      </div>
+      <div class="cocktail-row">
+        <div class="c-num">05</div>
+        <div class="c-info">
+          <div class="c-name">Passion Fruit Paloma</div>
+          <div class="c-desc">Blanco tequila · fresh passion fruit · grapefruit · sea salt · agave · sparkling water</div>
+        </div>
+        <div class="c-tag">House Special</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── SOCIAL ── -->
-<section id="social" class="section-pad">
-  <div class="container">
-    <div class="social-intro">
-      <div class="section-tag reveal">Follow the Journey</div>
-      <h2 class="section-h2 reveal">See Us <em>Live</em><br>in Action</h2>
-      <p class="section-lead reveal" style="margin: 0 auto 40px;">
-        From rooftop setups to intimate gatherings — follow our story across social media.
-      </p>
-    </div>
-
-    <div class="social-platforms reveal">
-      <a class="platform-btn" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-        Instagram
-      </a>
-      <a class="platform-btn" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.77 1.52V6.76a4.85 4.85 0 01-1-.07z"/></svg>
-        TikTok
-      </a>
-      <a class="platform-btn" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        Facebook
-      </a>
-      <a class="platform-btn" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        YouTube
-      </a>
-    </div>
-
-    <div class="social-embed-strip reveal">
-      <a class="embed-placeholder" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener">
-        <span class="embed-icon">📸</span>
-        <span class="embed-label">Latest Post</span>
-        <span class="embed-platform">Instagram</span>
-      </a>
-      <a class="embed-placeholder" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener">
-        <span class="embed-icon">🎬</span>
-        <span class="embed-label">Latest Video</span>
-        <span class="embed-platform">TikTok</span>
-      </a>
-      <a class="embed-placeholder" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener">
-        <span class="embed-icon">▶️</span>
-        <span class="embed-label">Latest Reel</span>
-        <span class="embed-platform">YouTube</span>
-      </a>
-      <a class="embed-placeholder" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener">
-        <span class="embed-icon">👥</span>
-        <span class="embed-label">Community</span>
-        <span class="embed-platform">Facebook</span>
-      </a>
+<section id="social" class="pad">
+  <div class="ctr">
+    <div class="social-wrap">
+      <div>
+        <div class="s-label rev">Follow the Journey</div>
+        <h2 class="s-h2 rev">See Us <em>Live</em><br>in Action</h2>
+        <div class="social-platforms-list rev">
+          <a class="platform-row" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener">
+            <div class="pl-left">
+              <div class="pl-icon">📸</div>
+              <div>
+                <div class="pl-name">Instagram</div>
+                <div class="pl-handle">@bartendersinfrontera</div>
+              </div>
+            </div>
+            <div class="pl-arrow">→</div>
+          </a>
+          <a class="platform-row" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener">
+            <div class="pl-left">
+              <div class="pl-icon">🎵</div>
+              <div>
+                <div class="pl-name">TikTok</div>
+                <div class="pl-handle">@bartendersinfronterany</div>
+              </div>
+            </div>
+            <div class="pl-arrow">→</div>
+          </a>
+          <a class="platform-row" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener">
+            <div class="pl-left">
+              <div class="pl-icon">▶️</div>
+              <div>
+                <div class="pl-name">YouTube</div>
+                <div class="pl-handle">@bartendersinfronterany</div>
+              </div>
+            </div>
+            <div class="pl-arrow">→</div>
+          </a>
+          <a class="platform-row" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener">
+            <div class="pl-left">
+              <div class="pl-icon">👥</div>
+              <div>
+                <div class="pl-name">Facebook</div>
+                <div class="pl-handle">Bartenders in Frontera</div>
+              </div>
+            </div>
+            <div class="pl-arrow">→</div>
+          </a>
+        </div>
+      </div>
+      <div class="social-visual rev-r">
+        <div class="social-frame">
+          <div class="social-big-icon">🍹</div>
+          <div class="social-frame-label">"Follow us for cocktail content"</div>
+          <a class="social-frame-cta" href="https://www.instagram.com/bartendersinfrontera" target="_blank">View Instagram →</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ── PROCESS ── -->
-<section id="process" class="section-pad">
-  <div class="container">
-    <div style="text-align:center; margin-bottom: 8px;">
-      <div class="section-tag reveal" style="justify-content:center;">How It Works</div>
-      <h2 class="section-h2 reveal">From <em>Inquiry</em> to Last Call</h2>
-    </div>
-    <div class="process-steps">
-      <div class="process-step reveal">
-        <div class="step-num">01</div>
-        <h3 class="step-title">Reach Out</h3>
-        <p class="step-desc">Fill out our inquiry form or call/text us directly. Tell us about your event date, size, and vision.</p>
+<section id="process" class="pad">
+  <div class="ctr">
+    <div class="process-wrap">
+      <div class="process-left">
+        <div class="s-label rev">How It Works</div>
+        <h2 class="s-h2 rev">From <em>Inquiry</em><br>to Last Call</h2>
+        <p class="s-body rev" style="margin-top:24px">Four simple steps stand between you and the perfect bar experience.</p>
       </div>
-      <div class="process-step reveal">
-        <div class="step-num">02</div>
-        <h3 class="step-title">Custom Proposal</h3>
-        <p class="step-desc">We craft a tailored cocktail menu and package proposal specifically for your event.</p>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">03</div>
-        <h3 class="step-title">Lock It In</h3>
-        <p class="step-desc">Sign the contract, pay the deposit, and your date is secured. We handle the rest.</p>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">04</div>
-        <h3 class="step-title">Raise a Glass</h3>
-        <p class="step-desc">We arrive early, set up beautifully, and pour all night. You enjoy every moment.</p>
+      <div class="process-steps rev">
+        <div class="p-step active">
+          <div class="p-n">01</div>
+          <div>
+            <div class="p-title">Reach Out</div>
+            <div class="p-desc">Fill out our inquiry form or call/text us directly. Tell us about your event date, size, and vision — the more detail, the better.</div>
+          </div>
+        </div>
+        <div class="p-step">
+          <div class="p-n">02</div>
+          <div>
+            <div class="p-title">Custom Proposal</div>
+            <div class="p-desc">We craft a tailored cocktail menu and package proposal specifically for your event. Usually within 24 hours.</div>
+          </div>
+        </div>
+        <div class="p-step">
+          <div class="p-n">03</div>
+          <div>
+            <div class="p-title">Lock It In</div>
+            <div class="p-desc">Sign the contract, pay the deposit, and your date is secured. We handle all the logistics from here.</div>
+          </div>
+        </div>
+        <div class="p-step">
+          <div class="p-n">04</div>
+          <div>
+            <div class="p-title">Raise a Glass</div>
+            <div class="p-desc">We arrive early, set up beautifully, and pour all night. You focus on enjoying every moment.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── TESTIMONIALS ── -->
-<section id="testimonials" class="section-pad">
-  <div class="container">
-    <div class="section-tag reveal">What People Say</div>
-    <h2 class="section-h2 reveal">Every Event, <em>Unforgettable</em></h2>
-    <div class="testimonials-grid">
-      <div class="testimonial-card reveal">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"Bartenders in Frontera made our wedding reception absolutely magical. The signature cocktails were a hit and the bartenders were professional, fun, and incredibly talented."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">👰</div>
+<section id="testimonials" class="pad">
+  <div class="ctr">
+    <div class="s-label rev">What People Say</div>
+    <h2 class="s-h2 rev">Every Event, <em>Unforgettable</em></h2>
+    <div class="testi-grid rev">
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Bartenders in Frontera made our wedding reception absolutely magical. The signature cocktails were a hit and the bartenders were professional, fun, and incredibly talented."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👰</div>
           <div>
-            <div class="author-name">Maria & Carlos R.</div>
-            <div class="author-event">Wedding Reception — Brooklyn</div>
+            <div class="testi-name">Maria & Carlos R.</div>
+            <div class="testi-event">Wedding Reception — Brooklyn</div>
           </div>
         </div>
       </div>
-      <div class="testimonial-card reveal">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"Hired them for our company's rooftop holiday party. Everyone was blown away by the quality of the drinks and the energy of the bartenders. Will absolutely book again."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">🏢</div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Hired them for our company's rooftop holiday party. Everyone was blown away by the quality of the drinks and the energy of the bartenders. Will absolutely book again."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">🏢</div>
           <div>
-            <div class="author-name">James T.</div>
-            <div class="author-event">Corporate Holiday Party — Manhattan</div>
+            <div class="testi-name">James T.</div>
+            <div class="testi-event">Corporate Holiday Party — Manhattan</div>
           </div>
         </div>
       </div>
-      <div class="testimonial-card reveal">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"The mango jalapeño margaritas alone were worth every penny. These guys know their craft. My birthday party was the talk of my friend group for weeks."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">🎂</div>
+      <div class="testi-card wide">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text" style="font-size:24px;">"The mango jalapeño margaritas alone were worth every penny. My birthday party was the talk of my friend group for weeks. These guys know their craft better than anyone I've worked with."</p>
+        <div class="testi-author" style="margin-top:32px;">
+          <div class="testi-avatar">🎂</div>
           <div>
-            <div class="author-name">Destiny M.</div>
-            <div class="author-event">30th Birthday Party — Queens</div>
+            <div class="testi-name">Destiny M.</div>
+            <div class="testi-event">30th Birthday Party — Queens</div>
           </div>
         </div>
       </div>
@@ -1354,101 +1378,87 @@
 
 <!-- ── CTA ── -->
 <section id="cta">
-  <div class="container">
-    <div class="cta-inner reveal">
+  <div class="cta-bg"></div>
+  <div class="ctr">
+    <div class="cta-inner rev">
+      <div class="cta-eyebrow">Ready to Elevate Your Event?</div>
       <h2 class="cta-h2">Your Event Deserves<br><em>Extraordinary</em> Drinks</h2>
       <p class="cta-sub">Let's create something unforgettable together.</p>
-      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-        <a href="#contact" class="btn-primary">Start Planning Your Event</a>
-        <a href="tel:6462205276" class="btn-outline">Call (646) 220-5276</a>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="#contact" class="btn-gold">Start Planning Your Event</a>
+        <a href="tel:6462205276" style="display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border:1px solid var(--border);color:var(--cream-dim);text-decoration:none;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;transition:border-color 0.25s,color 0.25s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--cream-dim)'">Call (646) 220-5276</a>
       </div>
-      <div class="cta-contact-row">
-        <a href="tel:6462205276" class="contact-item">
-          <span class="contact-item-icon">📞</span>
-          (646) 220-5276
-        </a>
-        <a href="mailto:Bartendersinfrontera@gmail.com" class="contact-item">
-          <span class="contact-item-icon">✉️</span>
-          Bartendersinfrontera@gmail.com
-        </a>
-        <span class="contact-item">
-          <span class="contact-item-icon">📍</span>
-          New York City, NY
-        </span>
+      <div class="cta-contact">
+        <a href="tel:6462205276">📞 (646) 220-5276</a>
+        <a href="mailto:Bartendersinfrontera@gmail.com">✉️ Bartendersinfrontera@gmail.com</a>
+        <span style="color:var(--muted);font-size:14px;">📍 All Five NYC Boroughs</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── CONTACT ── -->
-<section id="contact" class="section-pad">
-  <div class="container">
-    <div class="contact-grid">
-      <div>
-        <div class="section-tag reveal">Get in Touch</div>
-        <h2 class="section-h2 reveal">Let's Make Your<br><em>Event Legendary</em></h2>
-        <p class="section-lead reveal">
-          Ready to elevate your event? Reach out and let's talk about what we can create together.
-        </p>
-        <ul class="contact-info-list">
-          <li class="contact-info-item reveal">
-            <div class="contact-info-icon">📞</div>
-            <div class="contact-info-text">
-              <div class="contact-info-label">Phone / Text</div>
-              <a href="tel:6462205276">(646) 220-5276</a>
+<section id="contact" class="pad">
+  <div class="ctr">
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <div class="s-label rev">Get in Touch</div>
+        <h2 class="s-h2 rev">Let's Make Your<br>Event <em>Legendary</em></h2>
+        <ul class="contact-detail-list">
+          <li class="cd-item rev">
+            <div class="cd-icon">📞</div>
+            <div>
+              <div class="cd-label">Phone / Text</div>
+              <div class="cd-val"><a href="tel:6462205276">(646) 220-5276</a></div>
             </div>
           </li>
-          <li class="contact-info-item reveal">
-            <div class="contact-info-icon">✉️</div>
-            <div class="contact-info-text">
-              <div class="contact-info-label">Email</div>
-              <a href="mailto:Bartendersinfrontera@gmail.com">Bartendersinfrontera@gmail.com</a>
+          <li class="cd-item rev">
+            <div class="cd-icon">✉️</div>
+            <div>
+              <div class="cd-label">Email</div>
+              <div class="cd-val"><a href="mailto:Bartendersinfrontera@gmail.com">Bartendersinfrontera@gmail.com</a></div>
             </div>
           </li>
-          <li class="contact-info-item reveal">
-            <div class="contact-info-icon">📍</div>
-            <div class="contact-info-text">
-              <div class="contact-info-label">Service Area</div>
-              <span>All Five NYC Boroughs & Tri-State Area</span>
+          <li class="cd-item rev">
+            <div class="cd-icon">📍</div>
+            <div>
+              <div class="cd-label">Service Area</div>
+              <div class="cd-val">All Five NYC Boroughs & Tri-State Area</div>
             </div>
           </li>
-          <li class="contact-info-item reveal">
-            <div class="contact-info-icon">🕐</div>
-            <div class="contact-info-text">
-              <div class="contact-info-label">Response Time</div>
-              <span>Usually within a few hours</span>
+          <li class="cd-item rev">
+            <div class="cd-icon">🕐</div>
+            <div>
+              <div class="cd-label">Response Time</div>
+              <div class="cd-val">Usually within a few hours</div>
             </div>
           </li>
         </ul>
       </div>
-      <div class="contact-form reveal">
-        <h3 class="form-title">Book Your Event</h3>
-        <form id="booking-form" action="mailto:Bartendersinfrontera@gmail.com" method="post" enctype="text/plain">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="fname">First Name</label>
-              <input type="text" id="fname" name="First Name" placeholder="Maria" required>
+      <div class="contact-form-wrap rev-r">
+        <h3 class="form-h">Book Your Event</h3>
+        <form id="bform" action="mailto:Bartendersinfrontera@gmail.com" method="post" enctype="text/plain">
+          <div class="f-row">
+            <div class="f-group">
+              <label class="f-label" for="fn">First Name</label>
+              <input type="text" id="fn" name="First Name" placeholder="Maria" required>
             </div>
-            <div class="form-group">
-              <label for="lname">Last Name</label>
-              <input type="text" id="lname" name="Last Name" placeholder="Rodriguez" required>
+            <div class="f-group">
+              <label class="f-label" for="ln">Last Name</label>
+              <input type="text" id="ln" name="Last Name" placeholder="Rodriguez" required>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="Email" placeholder="maria@example.com" required>
+            <div class="f-group">
+              <label class="f-label" for="em">Email</label>
+              <input type="email" id="em" name="Email" placeholder="maria@example.com" required>
             </div>
-            <div class="form-group">
-              <label for="phone">Phone</label>
-              <input type="tel" id="phone" name="Phone" placeholder="(646) 000-0000">
+            <div class="f-group">
+              <label class="f-label" for="ph">Phone</label>
+              <input type="tel" id="ph" name="Phone" placeholder="(646) 000-0000">
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="event-type">Event Type</label>
-              <select id="event-type" name="Event Type">
-                <option value="">Select event type</option>
+            <div class="f-group">
+              <label class="f-label" for="et">Event Type</label>
+              <select id="et" name="Event Type">
+                <option value="">Select type</option>
                 <option>Wedding</option>
                 <option>Private Party</option>
                 <option>Corporate Event</option>
@@ -1459,19 +1469,17 @@
                 <option>Other</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="event-date">Event Date</label>
-              <input type="date" id="event-date" name="Event Date">
+            <div class="f-group">
+              <label class="f-label" for="ed">Event Date</label>
+              <input type="date" id="ed" name="Event Date">
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="guests">Guest Count</label>
-              <input type="number" id="guests" name="Guest Count" placeholder="50" min="1">
+            <div class="f-group">
+              <label class="f-label" for="gc">Guest Count</label>
+              <input type="number" id="gc" name="Guests" placeholder="50" min="1">
             </div>
-            <div class="form-group">
-              <label for="borough">Borough / Area</label>
-              <select id="borough" name="Borough">
+            <div class="f-group">
+              <label class="f-label" for="bo">Borough / Area</label>
+              <select id="bo" name="Area">
                 <option value="">Select area</option>
                 <option>Manhattan</option>
                 <option>Brooklyn</option>
@@ -1483,12 +1491,12 @@
                 <option>Other</option>
               </select>
             </div>
+            <div class="f-group full">
+              <label class="f-label" for="msg">Tell Us About Your Event</label>
+              <textarea id="msg" name="Message" placeholder="Share your vision, venue, special requests..."></textarea>
+            </div>
           </div>
-          <div class="form-group full">
-            <label for="message">Tell Us About Your Event</label>
-            <textarea id="message" name="Message" placeholder="Share any details about your vision, venue, special requests..."></textarea>
-          </div>
-          <button type="submit" class="form-submit">Send Inquiry →</button>
+          <button type="submit" class="f-submit">Send Inquiry →</button>
         </form>
       </div>
     </div>
@@ -1497,31 +1505,31 @@
 
 <!-- ── FOOTER ── -->
 <footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3>BartendersinFrontera</h3>
-        <p>Premium mobile bartending and cocktail experiences for every occasion across New York City.</p>
-        <div class="footer-socials">
-          <a class="social-icon" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener" title="Instagram">📸</a>
-          <a class="social-icon" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener" title="TikTok">🎵</a>
-          <a class="social-icon" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener" title="Facebook">👥</a>
-          <a class="social-icon" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener" title="YouTube">▶️</a>
+  <div class="ctr">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand-name">Bartenders<em>in</em>Frontera</div>
+        <p class="foot-brand-desc">Premium mobile bartending and cocktail experiences for every occasion across New York City and the Tri-State Area.</p>
+        <div class="foot-socials">
+          <a class="foot-social" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener">📸</a>
+          <a class="foot-social" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener">🎵</a>
+          <a class="foot-social" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener">👥</a>
+          <a class="foot-social" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener">▶️</a>
         </div>
       </div>
-      <div class="footer-col">
+      <div class="foot-col">
         <h4>Services</h4>
         <ul>
           <li><a href="#services">Weddings</a></li>
           <li><a href="#services">Private Parties</a></li>
           <li><a href="#services">Corporate Events</a></li>
-          <li><a href="#services">Mobile Bar Setup</a></li>
+          <li><a href="#services">Mobile Bar</a></li>
           <li><a href="#services">Custom Menus</a></li>
           <li><a href="#services">Workshops</a></li>
         </ul>
       </div>
-      <div class="footer-col">
-        <h4>Connect</h4>
+      <div class="foot-col">
+        <h4>Follow</h4>
         <ul>
           <li><a href="https://www.instagram.com/bartendersinfrontera" target="_blank">Instagram</a></li>
           <li><a href="https://www.tiktok.com/@bartendersinfronterany" target="_blank">TikTok</a></li>
@@ -1529,7 +1537,7 @@
           <li><a href="https://youtube.com/@bartendersinfronterany" target="_blank">YouTube</a></li>
         </ul>
       </div>
-      <div class="footer-col">
+      <div class="foot-col">
         <h4>Contact</h4>
         <ul>
           <li><a href="tel:6462205276">(646) 220-5276</a></li>
@@ -1539,170 +1547,80 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 Bartenders in Frontera. All rights reserved.</p>
-      <p>Serving all five NYC boroughs · <a href="mailto:Bartendersinfrontera@gmail.com">Bartendersinfrontera@gmail.com</a></p>
+    <div class="foot-bottom">
+      <p>© 2025 Bartenders in Frontera · All rights reserved.</p>
+      <p>NYC · <a href="mailto:Bartendersinfrontera@gmail.com">Bartendersinfrontera@gmail.com</a></p>
     </div>
   </div>
 </footer>
 
-<!-- ── SCRIPTS ── -->
 <script>
-  // ── Particles ──
-  (function(){
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    const COUNT = 60;
+  // ── CURSOR ──
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  window.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+  (function lerp(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(lerp); })();
+  document.querySelectorAll('a,button').forEach(el=>{ el.addEventListener('mouseenter',()=>{ ring.style.width='56px'; ring.style.height='56px'; }); el.addEventListener('mouseleave',()=>{ ring.style.width='36px'; ring.style.height='36px'; }); });
 
-    function resize(){
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    for(let i=0; i<COUNT; i++){
-      particles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 1.5 + 0.5,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: -Math.random() * 0.4 - 0.1,
-        life: Math.random(),
-        maxLife: Math.random() * 0.5 + 0.5,
-      });
-    }
-
-    function draw(){
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.life += 0.003;
-        if(p.life > p.maxLife){ p.life = 0; p.x = Math.random() * canvas.width; p.y = canvas.height + 10; }
-        const alpha = Math.sin(p.life / p.maxLife * Math.PI) * 0.5;
-        ctx.beginPath();
-        ctx.arc(p.x + Math.sin(p.life * 2) * 20, p.y - p.life * 200, p.r, 0, Math.PI*2);
-        ctx.fillStyle = `rgba(200,151,46,${alpha})`;
-        ctx.fill();
-      });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-  // ── Nav scroll ──
+  // ── NAV ──
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  });
+  window.addEventListener('scroll',()=>nav.classList.toggle('stuck', window.scrollY>60));
 
-  // ── Hamburger ──
-  document.getElementById('hamburger').addEventListener('click', function(){
-    const links = document.querySelector('.nav-links');
-    const isOpen = links.style.display === 'flex';
-    links.style.display = isOpen ? '' : 'flex';
-    links.style.flexDirection = 'column';
-    links.style.position = 'absolute';
-    links.style.top = '70px';
-    links.style.left = '0';
-    links.style.right = '0';
-    links.style.background = 'rgba(7,7,10,0.97)';
-    links.style.padding = '24px';
-    links.style.borderBottom = '1px solid rgba(200,151,46,0.15)';
-  });
-
-  // ── GSAP Hero ──
+  // ── GSAP HERO ──
   gsap.registerPlugin(ScrollTrigger);
+  gsap.to('#ey',{opacity:1,y:0,duration:1,delay:0.4,ease:'power3.out'});
+  gsap.from('.hero-h1 .line span',{yPercent:110,duration:1.1,stagger:0.1,delay:0.7,ease:'power3.out'});
+  gsap.to('#hh1',{opacity:1,duration:0.01,delay:0.7});
+  gsap.to('#hdesc',{opacity:1,y:0,duration:1,delay:1.2,ease:'power3.out'});
+  gsap.from('#hdesc',{y:24,duration:1,delay:1.2,ease:'power3.out'});
+  gsap.to('#hcta',{opacity:1,duration:1,delay:1.5,ease:'power3.out'});
+  gsap.from('#hcta',{y:20,duration:1,delay:1.5,ease:'power3.out'});
+  gsap.to('#hart',{opacity:1,scale:1,duration:1.5,delay:0.8,ease:'power3.out'});
 
-  gsap.to('#eyebrow', { opacity:1, y:0, duration:1, delay:0.3, ease:'power3.out' });
-  gsap.from('#hero-h1', { opacity:0, y:60, duration:1.2, delay:0.6, ease:'power3.out' });
-  gsap.to('#hero-h1', { opacity:1, duration:0.01, delay:0.6 });
-  gsap.to('#hero-sub', { opacity:1, y:0, duration:1, delay:1.0, ease:'power3.out' });
-  gsap.from('#hero-sub', { y:30, duration:1, delay:1.0, ease:'power3.out' });
-  gsap.to('#hero-actions', { opacity:1, y:0, duration:1, delay:1.3, ease:'power3.out' });
-  gsap.from('#hero-actions', { y:20, duration:1, delay:1.3, ease:'power3.out' });
-  gsap.to('#hero-scroll', { opacity:1, duration:1, delay:2.0 });
-
-  // ── Scroll reveal ──
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if(entry.isIntersecting){
-        setTimeout(() => {
-          entry.target.classList.add('visible');
-        }, 80);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  reveals.forEach(el => observer.observe(el));
-
-  // ── Smooth scroll ──
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.querySelector(a.getAttribute('href'));
-      if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+  // ── HERO PARALLAX ──
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    if(y<window.innerHeight){ const hl=document.querySelector('.hero-left'); if(hl){ hl.style.transform=`translateY(${y*0.2}px)`; hl.style.opacity=1-(y/(window.innerHeight*0.8)); }}
   });
 
-  // ── Parallax hero ──
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    const heroContent = document.querySelector('.hero-content');
-    if(heroContent && y < window.innerHeight) {
-      heroContent.style.transform = `translateY(${y * 0.3}px)`;
-      heroContent.style.opacity = 1 - (y / (window.innerHeight * 0.7));
-    }
+  // ── SCROLL REVEAL ──
+  const io=new IntersectionObserver(entries=>{ entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'),i*60); io.unobserve(e.target); }}); },{threshold:0.1});
+  document.querySelectorAll('.rev,.rev-l,.rev-r').forEach(el=>io.observe(el));
+
+  // ── COUNTER ──
+  const cio=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.querySelectorAll('[data-target]').forEach(el=>{ const t=+el.dataset.target; let s=0; const d=1600; const step=ts=>{ if(!s)s=ts; const p=Math.min((ts-s)/d,1); const v=1-Math.pow(1-p,3); el.textContent=Math.floor(v*t)+(t>=1000?'+':t===5?'':'+'); if(p<1)requestAnimationFrame(step); }; requestAnimationFrame(step); }); cio.unobserve(e.target); }});
+  },{threshold:0.4});
+  const sr=document.querySelector('.about-stats-row'); if(sr)cio.observe(sr);
+
+  // ── PROCESS STEPS ──
+  document.querySelectorAll('.p-step').forEach((step,i)=>{
+    const sio=new IntersectionObserver(e=>{ if(e[0].isIntersecting){ step.classList.add('active'); sio.unobserve(step); }},{threshold:0.6});
+    sio.observe(step);
   });
 
-  // ── Counter animation ──
-  function animateCounter(el, target, suffix = '') {
-    let start = 0;
-    const duration = 1500;
-    const step = timestamp => {
-      if(!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target) + suffix;
-      if(progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
+  // ── SMOOTH SCROLL ──
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click',e=>{ e.preventDefault(); const t=document.querySelector(a.getAttribute('href')); if(t)t.scrollIntoView({behavior:'smooth',block:'start'}); }); });
 
-  const statObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        const nums = entry.target.querySelectorAll('.stat-num');
-        nums.forEach(num => {
-          const text = num.textContent;
-          const match = text.match(/^(\d+)(.*)$/);
-          if(match) animateCounter(num, parseInt(match[1]), match[2]);
-        });
-        statObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  const statsEl = document.querySelector('.about-stats');
-  if(statsEl) statObserver.observe(statsEl);
-
-  // ── Form submit ──
-  document.getElementById('booking-form').addEventListener('submit', function(e){
+  // ── FORM ──
+  document.getElementById('bform').addEventListener('submit',function(e){
     e.preventDefault();
-    const btn = this.querySelector('.form-submit');
-    btn.textContent = 'Sending...';
-    btn.style.background = '#5a7a5e';
-    // Collect form data and build mailto link
-    const data = new FormData(this);
-    let body = '';
-    data.forEach((v, k) => { if(v) body += `${k}: ${v}\n`; });
-    const mailto = `mailto:Bartendersinfrontera@gmail.com?subject=Event%20Inquiry%20from%20Website&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setTimeout(() => {
-      btn.textContent = '✓ Inquiry Sent — We\'ll Be in Touch!';
-      btn.style.background = '#2d5a2d';
-    }, 800);
+    const btn=this.querySelector('.f-submit');
+    const fd=new FormData(this);
+    let body='';
+    fd.forEach((v,k)=>{ if(v)body+=`${k}: ${v}\n`; });
+    window.location.href=`mailto:Bartendersinfrontera@gmail.com?subject=Event%20Inquiry&body=${encodeURIComponent(body)}`;
+    btn.textContent='✓ Opening your email client...';
+    btn.style.background='#2d5a2d';
+  });
+
+  // ── HAMBURGER ──
+  document.getElementById('ham').addEventListener('click',()=>{
+    const nl=document.querySelector('.nav-links');
+    const open=nl.style.display==='flex';
+    Object.assign(nl.style,{display:open?'':'flex',flexDirection:'column',position:'fixed',top:'60px',left:'0',right:'0',background:'rgba(11,9,7,0.97)',padding:'32px 48px',gap:'24px',zIndex:'199',borderBottom:'1px solid rgba(200,146,42,0.15)'});
+    if(open)nl.style.display='none';
   });
 </script>
 </body>
