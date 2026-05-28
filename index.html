@@ -1,1627 +1,928 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bartenders in Frontera — NYC Cocktail & Bar Services</title>
-  <meta name="description" content="Premium mobile bartending and cocktail experiences for events, weddings, private parties, and corporate gatherings in New York City.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700;1,9..144,900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bartenders in Frontera — NYC</title>
+<meta name="description" content="Premium mobile bartending for events, weddings & parties across NYC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --ink:#09070a;--deep:#0f0c0e;--surface:#181318;--surface2:#221b22;
+  --gold:#c8922a;--gold-lt:#e0a83a;--ember:#c94f2e;
+  --cream:#f2ede4;--dim:#a09890;--muted:#6b5e58;
+  --border:rgba(200,146,42,0.14);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--ink);color:var(--cream);-webkit-font-smoothing:antialiased}
 
-  <style>
-    /* ── TOKENS ── */
-    :root {
-      --ink:       #0b0907;
-      --deep:      #0f0d0a;
-      --surface:   #181510;
-      --surface2:  #201c16;
-      --surface3:  #2a2520;
-      --gold:      #c8922a;
-      --gold-lt:   #e0a83a;
-      --ember:     #c94f2e;
-      --cream:     #f2ede4;
-      --cream-dim: #b8b2a8;
-      --muted:     #6b6358;
-      --border:    rgba(200,146,42,0.14);
-      --grain:     url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    }
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; font-size:16px; }
-    body {
-      background: var(--ink);
-      color: var(--cream);
-      font-family: 'Outfit', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+/* ── GRAIN ── */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.55;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  background-size:128px 128px}
 
-    /* ── GRAIN OVERLAY ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: var(--grain);
-      background-size: 128px 128px;
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0.6;
-      mix-blend-mode: overlay;
-    }
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,padding .4s}
+nav.dark{background:rgba(9,7,10,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 48px}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;letter-spacing:.04em;color:var(--cream);cursor:pointer;text-transform:uppercase}
+.nav-logo em{font-style:italic;color:var(--gold)}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-link{background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:8px 14px;cursor:pointer;transition:color .25s;font-weight:500}
+.nav-link:hover,.nav-link.active{color:var(--cream)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-btn{background:none;border:1px solid var(--border);color:var(--dim);font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;cursor:pointer;transition:all .25s;border-radius:2px;font-weight:500}
+.nav-btn:hover{border-color:var(--gold);color:var(--gold)}
+.nav-btn.active-lang{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+.music-btn{display:flex;align-items:center;gap:6px}
+.music-icon{font-size:14px}
+.music-bars{display:flex;gap:2px;align-items:flex-end;height:14px}
+.music-bars span{display:block;width:2px;background:var(--gold);border-radius:1px;animation:musicBar .6s ease infinite alternate}
+.music-bars span:nth-child(1){height:6px;animation-delay:0s}
+.music-bars span:nth-child(2){height:14px;animation-delay:.15s}
+.music-bars span:nth-child(3){height:9px;animation-delay:.3s}
+.music-bars span:nth-child(4){height:12px;animation-delay:.1s}
+.music-bars.paused span{animation-play-state:paused;height:4px}
+@keyframes musicBar{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
+.book-btn{background:var(--gold);border:none;color:var(--ink);font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:10px 22px;cursor:pointer;font-weight:700;border-radius:2px;transition:background .25s}
+.book-btn:hover{background:var(--gold-lt)}
+.nav-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.nav-ham span{display:block;width:22px;height:1.5px;background:var(--cream);transition:.3s}
 
-    /* ── CURSOR ── */
-    .cursor {
-      position: fixed;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--gold);
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%,-50%);
-      transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      position: fixed;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      border: 1px solid rgba(200,146,42,0.5);
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%,-50%);
-      transition: transform 0.2s ease-out, width 0.3s, height 0.3s;
-    }
-    @media (hover: none) { .cursor, .cursor-ring { display: none; } }
+/* ── PAGE SYSTEM ── */
+.pages-wrap{position:fixed;inset:0;overflow:hidden;z-index:1}
+.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);transform:translateY(30px)}
+.page.active{opacity:1;pointer-events:all;transform:translateY(0)}
+.page.exit-up{opacity:0;transform:translateY(-30px)}
+.page.exit-down{opacity:0;transform:translateY(30px)}
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 200;
-      padding: 28px 48px;
-      display: flex; align-items: center; justify-content: space-between;
-      transition: padding 0.4s, background 0.4s, backdrop-filter 0.4s;
-    }
-    nav.stuck {
-      padding: 16px 48px;
-      background: rgba(11,9,7,0.88);
-      backdrop-filter: blur(24px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: 'Fraunces', serif;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--cream);
-      text-decoration: none;
-    }
-    .nav-logo em { font-style: italic; color: var(--gold); }
-    .nav-links { display:flex; gap:40px; list-style:none; }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-weight: 500;
-      transition: color 0.25s;
-    }
-    .nav-links a:hover { color: var(--cream); }
-    .nav-book {
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--ink) !important;
-      background: var(--gold);
-      padding: 10px 22px;
-      border-radius: 2px;
-      text-decoration: none;
-      transition: background 0.25s;
-    }
-    .nav-book:hover { background: var(--gold-lt) !important; }
-    .nav-ham { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; }
-    .nav-ham span { display:block; width:24px; height:1.5px; background:var(--cream); transition:0.3s; }
+/* ── PAGE DOTS ── */
+.page-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;gap:10px}
+.dot{width:6px;height:6px;border-radius:50%;border:1px solid var(--muted);cursor:pointer;transition:all .3s}
+.dot.active{background:var(--gold);border-color:var(--gold);transform:scale(1.4)}
+.dot:hover{border-color:var(--gold)}
 
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-left {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 64px 80px;
-      position: relative;
-      z-index: 2;
-    }
-    .hero-right {
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-right-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 80% at 60% 40%, rgba(200,146,42,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 50% at 80% 70%, rgba(201,79,46,0.09) 0%, transparent 60%),
-        linear-gradient(160deg, var(--surface) 0%, var(--deep) 100%);
-    }
-    /* Diagonal rule line */
-    .hero-right::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 1px;
-      height: 100%;
-      background: linear-gradient(to bottom, transparent, var(--border) 30%, var(--border) 70%, transparent);
-    }
-    /* Glass circle behind cocktail art */
-    .hero-art {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      width: 360px; height: 360px;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 1;
-    }
-    .hero-art-ring {
-      position: absolute;
-      border-radius: 50%;
-      animation: ringPulse 6s ease-in-out infinite;
-    }
-    .hero-art-ring.r1 {
-      width: 360px; height: 360px;
-      border: 1px solid rgba(200,146,42,0.12);
-      animation-delay: 0s;
-    }
-    .hero-art-ring.r2 {
-      width: 280px; height: 280px;
-      border: 1px solid rgba(200,146,42,0.2);
-      animation-delay: 1s;
-    }
-    .hero-art-ring.r3 {
-      width: 200px; height: 200px;
-      background: rgba(200,146,42,0.06);
-      border: 1px solid rgba(200,146,42,0.3);
-      animation-delay: 2s;
-    }
-    @keyframes ringPulse {
-      0%,100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.04); opacity: 0.7; }
-    }
-    .hero-art-icon {
-      font-size: 80px;
-      line-height: 1;
-      position: relative;
-      z-index: 2;
-      filter: drop-shadow(0 0 40px rgba(200,146,42,0.25));
-      animation: iconFloat 4s ease-in-out infinite;
-    }
-    @keyframes iconFloat {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
+/* ── AUDIO ── */
+#audio{display:none}
 
-    /* NYC tag floating */
-    .hero-tag {
-      position: absolute;
-      top: 30%;
-      right: 10%;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--muted);
-      z-index: 2;
-    }
-    .hero-year {
-      position: absolute;
-      bottom: 80px;
-      left: 48px;
-      font-family: 'Fraunces', serif;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      z-index: 2;
-    }
+/* ── GLOBAL VIDEO BG ── */
+.global-video-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;transition:opacity .8s}
+.global-video-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,7,10,.3) 0%,rgba(9,7,10,.5) 50%,rgba(9,7,10,.92) 100%);transition:background .8s}
+.global-video-bg iframe{position:absolute;top:50%;left:50%;width:180vw;height:180vh;transform:translate(-50%,-50%);pointer-events:none;border:none}
+body.page-deep .global-video-bg::after{background:rgba(9,7,10,.78)}
 
-    .hero-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 32px;
-      opacity: 0;
-    }
-    .hero-eyebrow::after {
-      content: '';
-      flex: 1;
-      max-width: 60px;
-      height: 1px;
-      background: var(--gold);
-    }
-    .hero-h1 {
-      font-family: 'Fraunces', serif;
-      font-optical-sizing: auto;
-      font-size: clamp(56px, 7vw, 96px);
-      font-weight: 900;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      margin-bottom: 32px;
-      opacity: 0;
-    }
-    .hero-h1 .line { display: block; overflow: hidden; }
-    .hero-h1 .line span { display: block; }
-    .hero-h1 em {
-      font-style: italic;
-      color: var(--gold);
-      font-weight: 300;
-    }
-    .hero-desc {
-      font-size: 16px;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 400px;
-      margin-bottom: 40px;
-      font-weight: 300;
-      opacity: 0;
-    }
-    .hero-ctas {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      opacity: 0;
-    }
-    .btn-gold {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--gold);
-      color: var(--ink);
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 16px 32px;
-      border-radius: 2px;
-      text-decoration: none;
-      transition: background 0.25s, transform 0.2s;
-    }
-    .btn-gold:hover { background: var(--gold-lt); transform: translateY(-1px); }
-    .btn-ghost {
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: color 0.25s, gap 0.25s;
-    }
-    .btn-ghost:hover { color: var(--cream); gap: 12px; }
+/* ════════════════════════
+   PAGE 0 — HOME
+═══════════════════════ */
+#page-home{background:transparent}
+.home-video-bg{position:absolute;inset:0;overflow:hidden;z-index:0}
+.home-video-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,7,10,.3) 0%,rgba(9,7,10,.5) 50%,rgba(9,7,10,.9) 100%)}
+.home-video-bg iframe{position:absolute;top:50%;left:50%;width:180vw;height:180vh;transform:translate(-50%,-50%);pointer-events:none;border:none}
+.home-content{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 72px 80px}
+.home-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.home-eyebrow::after{content:'';width:40px;height:1px;background:var(--gold)}
+.home-h1{font-family:'Fraunces',serif;font-optical-sizing:auto;font-size:clamp(56px,9vw,110px);font-weight:900;line-height:.95;letter-spacing:-.035em;margin-bottom:32px}
+.home-h1 .line{display:block;overflow:hidden}
+.home-h1 .line span{display:block;transform:translateY(110%);will-change:transform}
+.home-h1 em{font-style:italic;color:var(--gold);font-weight:300}
+.home-sub{font-size:18px;color:var(--dim);font-weight:300;line-height:1.6;max-width:500px;margin-bottom:40px;opacity:0}
+.home-ctas{display:flex;gap:16px;flex-wrap:wrap;opacity:0}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--ink);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:16px 32px;border:none;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:background .25s,transform .2s}
+.btn-gold:hover{background:var(--gold-lt);transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--dim);font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:16px 0;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:color .25s,gap .25s;font-weight:500}
+.btn-ghost:hover{color:var(--cream);gap:14px}
+/* Scroll hint */
+.home-scroll{position:absolute;bottom:36px;right:72px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px}
+.home-scroll span{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl}
+.scroll-pulse{width:1px;height:60px;background:linear-gradient(var(--gold),transparent);animation:scrollPulse 2s ease infinite}
+@keyframes scrollPulse{0%{transform:scaleY(0);transform-origin:top;opacity:1}50%{transform:scaleY(1);transform-origin:top;opacity:1}100%{transform:scaleY(1);transform-origin:bottom;opacity:0}}
+/* Floating social icons on home */
+.home-socials{position:absolute;left:28px;top:50%;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;gap:16px}
+.home-social-icon{width:38px;height:38px;background:rgba(9,7,10,.6);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none;border-radius:50%;backdrop-filter:blur(8px);transition:border-color .25s,transform .25s}
+.home-social-icon:hover{border-color:var(--gold);transform:scale(1.1)}
 
-    /* Scroll counter */
-    .hero-scroll-counter {
-      position: absolute;
-      bottom: 48px;
-      right: 48px;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-    }
-    .scroll-num {
-      font-family: 'Fraunces', serif;
-      font-size: 48px;
-      font-weight: 900;
-      line-height: 1;
-      color: rgba(200,146,42,0.12);
-    }
-    .scroll-line {
-      width: 1px;
-      height: 64px;
-      background: linear-gradient(to bottom, var(--gold), transparent);
-      margin: 0 auto;
-      animation: lineDown 2s ease infinite;
-      transform-origin: top;
-    }
-    @keyframes lineDown {
-      0% { transform: scaleY(0); opacity: 1; }
-      50% { transform: scaleY(1); opacity: 1; }
-      100% { transform: scaleY(1); opacity: 0; }
-    }
+/* ════════════════════════
+   PAGE 1 — ABOUT
+═══════════════════════ */
+#page-about{background:transparent}
+.about-inner{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative}
+.about-left{padding:140px 64px 80px 72px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border)}
+.about-right{padding:140px 72px 80px 64px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.about-right-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 60% 40%,rgba(200,146,42,.07) 0%,transparent 70%)}
+.s-tag{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.s-tag::before{content:'';width:20px;height:1px;background:var(--gold)}
+.s-h2{font-family:'Fraunces',serif;font-optical-sizing:auto;font-size:clamp(38px,4.5vw,64px);font-weight:900;line-height:1.0;letter-spacing:-.03em;margin-bottom:24px}
+.s-h2 em{font-style:italic;color:var(--gold);font-weight:300}
+.s-body{font-size:16px;color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:20px}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:40px}
+.stat-box{background:var(--deep);padding:28px}
+.stat-n{font-family:'Fraunces',serif;font-size:44px;font-weight:900;color:var(--gold);line-height:1;margin-bottom:4px}
+.stat-l{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+/* Video embed in about */
+.about-video-frame{position:relative;border:1px solid var(--border);overflow:hidden;margin-top:32px;background:var(--surface)}
+.about-video-frame iframe{width:100%;height:280px;border:none;display:block}
+.about-video-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,var(--deep));pointer-events:none}
 
-    /* ── TICKER ── */
-    .ticker {
-      overflow: hidden;
-      background: var(--gold);
-      padding: 14px 0;
-      position: relative;
-      z-index: 2;
-    }
-    .ticker-track {
-      display: flex;
-      gap: 0;
-      white-space: nowrap;
-      animation: tick 18s linear infinite;
-    }
-    .ticker-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 0;
-      font-family: 'Fraunces', serif;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink);
-      padding: 0 32px;
-    }
-    .ticker-sep {
-      color: var(--ember);
-      margin: 0 8px;
-    }
-    @keyframes tick {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+/* ════════════════════════
+   PAGE 2 — SERVICES
+═══════════════════════ */
+#page-services{background:transparent}
+.services-inner{min-height:100vh;padding:120px 72px 80px}
+.services-head{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:48px}
+.bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(200px,auto);gap:2px;background:var(--border);border:1px solid var(--border)}
+.b{background:var(--surface);padding:40px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;transition:background .35s;cursor:default}
+.b:hover{background:var(--surface2)}
+.b::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--ember));transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.b:hover::before{transform:scaleX(1)}
+.b.c5{grid-column:span 5}.b.c4{grid-column:span 4}.b.c3{grid-column:span 3}
+.b.c7{grid-column:span 7}.b.c6{grid-column:span 6}
+.b-n{position:absolute;top:20px;right:24px;font-family:'Fraunces',serif;font-size:11px;letter-spacing:.15em;color:var(--muted)}
+.b-icon{font-size:36px;margin-bottom:16px}
+.b-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.b-desc{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300}
+.b.big .b-title{font-size:26px}
+.b.big .b-desc{max-width:320px}
 
-    /* ── CONTAINER ── */
-    .ctr { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
-    .pad { padding: 120px 0; }
-    section { position: relative; }
+/* ════════════════════════
+   PAGE 3 — MENU
+═══════════════════════ */
+#page-menu{background:transparent}
+.menu-inner{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative}
+.menu-left{padding:140px 64px 80px 72px;border-right:1px solid var(--border)}
+.menu-right{padding:140px 40px 80px;overflow-y:auto;max-height:100vh}
+.cocktail-item{padding:28px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:56px 1fr auto;gap:24px;align-items:center;transition:opacity .3s;cursor:default}
+.cocktail-item:hover{opacity:.8}
+.cocktail-item:last-child{border-bottom:none}
+.c-n{font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(200,146,42,.25);line-height:1;transition:all .3s}
+.cocktail-item:hover .c-n{-webkit-text-stroke-color:var(--gold);color:var(--gold)}
+.c-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em}
+.c-desc{font-size:13px;color:var(--muted);font-weight:300}
+.c-tag{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:5px 12px;white-space:nowrap}
+/* Animated cocktail display */
+.menu-visual{position:sticky;top:50%;transform:translateY(-50%) translateY(0)}
+.cocktail-display{text-align:center;padding:40px}
+.cocktail-emoji-big{font-size:100px;display:block;animation:cocktailFloat 4s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(200,146,42,.2))}
+@keyframes cocktailFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-16px) rotate(3deg)}}
+.cocktail-glow{width:200px;height:200px;border-radius:50%;background:radial-gradient(ellipse,rgba(200,146,42,.12),transparent 70%);margin:0 auto -60px;animation:glowPulse 4s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.2);opacity:1}}
+/* Menu bg decoration */
+.menu-bg-text{position:absolute;bottom:80px;left:72px;font-family:'Fraunces',serif;font-size:140px;font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(200,146,42,.06);line-height:1;user-select:none;pointer-events:none;white-space:nowrap}
 
-    /* ── SECTION LABEL ── */
-    .s-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 24px;
-    }
-    .s-label::before { content: ''; width: 20px; height: 1px; background: var(--gold); }
+/* ════════════════════════
+   PAGE 4 — GALLERY
+═══════════════════════ */
+#page-gallery{background:transparent}
+.gallery-inner{min-height:100vh;padding:120px 72px 80px}
+.gallery-head{margin-bottom:48px}
+.gallery-platforms{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px}
+.platform-panel{background:var(--surface);border:1px solid var(--border);padding:32px;display:flex;flex-direction:column;gap:16px;transition:border-color .3s,background .3s}
+.platform-panel:hover{border-color:rgba(200,146,42,.35);background:var(--surface2)}
+.platform-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.platform-icon{font-size:24px}
+.platform-name{font-family:'Fraunces',serif;font-size:18px;font-weight:700}
+.platform-handle{font-size:12px;color:var(--muted)}
+.platform-cta{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;margin-top:auto;transition:gap .25s}
+.platform-cta:hover{gap:12px}
+/* Social embed area */
+.gallery-embeds{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.embed-col{display:flex;flex-direction:column;gap:24px}
+.embed-title{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+/* TikTok/Instagram embed containers */
+.social-embed-wrap{background:var(--surface);border:1px solid var(--border);overflow:hidden;border-radius:2px;display:flex;align-items:center;justify-content:center;min-height:400px}
+/* YouTube embed */
+.yt-wrap{border:1px solid var(--border);overflow:hidden;background:var(--surface);position:relative}
+.yt-wrap iframe{width:100%;height:300px;border:none;display:block}
 
-    .s-h2 {
-      font-family: 'Fraunces', serif;
-      font-optical-sizing: auto;
-      font-size: clamp(40px, 5vw, 72px);
-      font-weight: 900;
-      line-height: 1.0;
-      letter-spacing: -0.025em;
-    }
-    .s-h2 em { font-style: italic; color: var(--gold); font-weight: 300; }
-    .s-body { font-size: 17px; color: var(--muted); line-height: 1.75; font-weight: 300; }
+/* ════════════════════════
+   PAGE 5 — CONTACT
+═══════════════════════ */
+#page-contact{background:transparent}
+.contact-inner{min-height:100vh;display:grid;grid-template-columns:1fr 1.4fr}
+.contact-left{padding:140px 64px 80px 72px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.contact-left-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 30% 60%,rgba(200,146,42,.07) 0%,transparent 70%)}
+.contact-details{display:flex;flex-direction:column;gap:0;margin-top:40px}
+.cd{display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--border)}
+.cd:last-child{border-bottom:none}
+.cd-icon{width:40px;height:40px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border-radius:50%}
+.cd-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.cd-val{font-size:15px}
+.cd-val a{color:var(--cream);text-decoration:none;transition:color .25s}
+.cd-val a:hover{color:var(--gold)}
+.contact-socials{display:flex;gap:10px;margin-top:40px}
+.cs-icon{width:44px;height:44px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;transition:all .25s;border-radius:2px}
+.cs-icon:hover{border-color:var(--gold);background:rgba(200,146,42,.08);transform:translateY(-3px)}
+.contact-right{padding:140px 72px 80px 64px;overflow-y:auto;max-height:100vh;display:flex;align-items:center}
+.form-wrap{width:100%;background:var(--surface);border:1px solid var(--border);padding:56px}
+.form-h{font-family:'Fraunces',serif;font-size:28px;font-weight:700;margin-bottom:40px;letter-spacing:-.01em}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.f-g{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.f-g.full{grid-column:1/-1}
+.f-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+input,select,textarea{background:var(--surface2);border:1px solid var(--border);color:var(--cream);font-family:'Outfit',sans-serif;font-size:14px;font-weight:300;padding:13px 16px;outline:none;width:100%;transition:border-color .25s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+select option{background:var(--surface2)}
+textarea{resize:vertical;min-height:100px}
+.f-submit{width:100%;background:var(--gold);color:var(--ink);border:none;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:18px;cursor:pointer;margin-top:8px;transition:background .25s}
+.f-submit:hover{background:var(--gold-lt)}
 
-    /* ── ABOUT ── */
-    #about { background: var(--deep); }
-    .about-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 0;
-      align-items: stretch;
-    }
-    .about-left {
-      padding: 120px 80px 120px 0;
-      border-right: 1px solid var(--border);
-    }
-    .about-right {
-      padding: 120px 0 120px 80px;
-    }
-    .about-big-num {
-      font-family: 'Fraunces', serif;
-      font-size: 160px;
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -0.04em;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(200,146,42,0.2);
-      margin-bottom: 24px;
-      display: block;
-    }
-    .about-stats-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--border);
-      margin-top: 48px;
-      border: 1px solid var(--border);
-    }
-    .stat-box {
-      background: var(--deep);
-      padding: 32px;
-    }
-    .stat-n {
-      font-family: 'Fraunces', serif;
-      font-size: 48px;
-      font-weight: 900;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-    .stat-l { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-    .about-pull {
-      font-family: 'Fraunces', serif;
-      font-optical-sizing: auto;
-      font-size: clamp(28px, 3vw, 42px);
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.3;
-      color: var(--cream-dim);
-      margin-bottom: 40px;
-      letter-spacing: -0.01em;
-    }
-    .about-pull strong { font-weight: 900; font-style: normal; color: var(--cream); }
-    .about-body { font-size: 16px; color: var(--muted); line-height: 1.8; font-weight: 300; }
+/* ── REVEAL ANIMATIONS ── */
+.rev{opacity:0;transform:translateY(32px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.rev.vis{opacity:1;transform:translateY(0)}
+.rev-l{opacity:0;transform:translateX(-32px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.rev-l.vis{opacity:1;transform:translateX(0)}
+.rev-r{opacity:0;transform:translateX(32px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.rev-r.vis{opacity:1;transform:translateX(0)}
 
-    /* ── SERVICES BENTO ── */
-    #services { background: var(--ink); }
-    .bento-head {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: end;
-      margin-bottom: 48px;
-    }
-    .bento {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-auto-rows: 220px;
-      gap: 2px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-    .b-card {
-      background: var(--surface);
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.35s;
-      cursor: default;
-    }
-    .b-card:hover { background: var(--surface2); }
-    .b-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1.5px;
-      background: linear-gradient(90deg, var(--gold), var(--ember));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-    }
-    .b-card:hover::before { transform: scaleX(1); }
+/* ── CURSOR ── */
+.cur{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s;mix-blend-mode:difference}
+.cur-ring{position:fixed;width:32px;height:32px;border-radius:50%;border:1px solid rgba(200,146,42,.5);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s}
+@media(hover:none){.cur,.cur-ring{display:none}}
 
-    .b-card.c5 { grid-column: span 5; }
-    .b-card.c4 { grid-column: span 4; }
-    .b-card.c3 { grid-column: span 3; }
-    .b-card.c7 { grid-column: span 7; }
-    .b-card.c8 { grid-column: span 8; }
-    .b-card.r2 { grid-row: span 2; }
+/* ── PAGE TRANSITION LOADER ── */
+.page-loader{position:fixed;inset:0;background:var(--ink);z-index:998;pointer-events:none;opacity:0;transition:opacity .4s}
+.page-loader.show{opacity:1;pointer-events:all}
+.loader-line{position:absolute;bottom:0;left:0;height:2px;background:var(--gold);width:0;transition:width .4s}
 
-    .b-num {
-      position: absolute;
-      top: 24px; right: 28px;
-      font-family: 'Fraunces', serif;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-    }
-    .b-icon { font-size: 36px; margin-bottom: 16px; }
-    .b-title {
-      font-family: 'Fraunces', serif;
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: -0.01em;
-    }
-    .b-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+/* ── MOBILE NAV ── */
+.mobile-nav{position:fixed;inset:0;top:60px;background:rgba(9,7,10,.97);z-index:490;display:none;flex-direction:column;align-items:center;justify-content:center;gap:24px;backdrop-filter:blur(20px)}
+.mobile-nav.open{display:flex}
+.mobile-nav-link{background:none;border:none;color:var(--cream);font-family:'Fraunces',serif;font-size:32px;font-weight:700;font-style:italic;cursor:pointer;opacity:.6;transition:opacity .25s,color .25s}
+.mobile-nav-link:hover,.mobile-nav-link.active{opacity:1;color:var(--gold)}
 
-    /* Featured card (large) */
-    .b-card.featured {
-      background:
-        radial-gradient(ellipse 80% 80% at 30% 70%, rgba(200,146,42,0.1) 0%, transparent 60%),
-        var(--surface);
-    }
-    .b-card.featured .b-title { font-size: 28px; }
-
-    /* ── COCKTAILS — HORIZONTAL ZIG-ZAG ── */
-    #cocktails { background: var(--deep); }
-    .cocktails-head {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: end;
-      margin-bottom: 64px;
-    }
-    .cocktail-list { display: flex; flex-direction: column; gap: 2px; }
-    .cocktail-row {
-      display: grid;
-      grid-template-columns: 80px 1fr auto;
-      align-items: center;
-      gap: 32px;
-      padding: 28px 40px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      transition: background 0.3s, border-color 0.3s;
-      cursor: default;
-    }
-    .cocktail-row:hover {
-      background: var(--surface2);
-      border-color: rgba(200,146,42,0.3);
-    }
-    .c-num {
-      font-family: 'Fraunces', serif;
-      font-size: 32px;
-      font-weight: 900;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(200,146,42,0.3);
-      line-height: 1;
-    }
-    .cocktail-row:hover .c-num {
-      -webkit-text-stroke-color: var(--gold);
-      color: var(--gold);
-    }
-    .c-info {}
-    .c-name {
-      font-family: 'Fraunces', serif;
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 4px;
-    }
-    .c-desc { font-size: 13px; color: var(--muted); font-weight: 300; }
-    .c-tag {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid var(--border);
-      padding: 6px 14px;
-      white-space: nowrap;
-    }
-
-    /* ── SOCIAL ── */
-    #social { background: var(--ink); }
-    .social-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: start;
-    }
-    .social-platforms-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      margin-top: 40px;
-    }
-    .platform-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 24px 32px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--cream);
-      transition: background 0.3s, border-color 0.3s, transform 0.2s;
-    }
-    .platform-row:hover {
-      background: var(--surface2);
-      border-color: rgba(200,146,42,0.35);
-      transform: translateX(6px);
-    }
-    .pl-left { display: flex; align-items: center; gap: 16px; }
-    .pl-icon { font-size: 20px; }
-    .pl-name { font-size: 15px; font-weight: 500; letter-spacing: 0.02em; }
-    .pl-handle { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .pl-arrow { color: var(--gold); font-size: 18px; transition: transform 0.25s; }
-    .platform-row:hover .pl-arrow { transform: translateX(4px); }
-    .social-visual {
-      position: sticky;
-      top: 120px;
-    }
-    .social-frame {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      aspect-ratio: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .social-frame::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,146,42,0.08) 0%, transparent 70%);
-    }
-    .social-big-icon { font-size: 80px; }
-    .social-frame-label {
-      font-family: 'Fraunces', serif;
-      font-size: 14px;
-      font-style: italic;
-      color: var(--muted);
-    }
-    .social-frame-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      padding: 10px 20px;
-      transition: background 0.25s;
-    }
-    .social-frame-cta:hover { background: rgba(200,146,42,0.08); }
-
-    /* ── PROCESS ── */
-    #process { background: var(--deep); }
-    .process-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: start;
-    }
-    .process-left {
-      position: sticky;
-      top: 120px;
-    }
-    .process-steps { display: flex; flex-direction: column; gap: 2px; }
-    .p-step {
-      display: grid;
-      grid-template-columns: 64px 1fr;
-      gap: 24px;
-      align-items: start;
-      padding: 32px 0;
-      border-bottom: 1px solid var(--border);
-      opacity: 0.4;
-      transition: opacity 0.3s;
-    }
-    .p-step:last-child { border-bottom: none; }
-    .p-step.active { opacity: 1; }
-    .p-n {
-      font-family: 'Fraunces', serif;
-      font-size: 48px;
-      font-weight: 900;
-      line-height: 1;
-      color: var(--gold);
-    }
-    .p-title {
-      font-family: 'Fraunces', serif;
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .p-desc { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
-
-    /* ── TESTIMONIALS ── */
-    #testimonials { background: var(--ink); }
-    .testi-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-top: 60px;
-    }
-    .testi-card {
-      background: var(--surface);
-      padding: 56px;
-      position: relative;
-    }
-    .testi-quote {
-      position: absolute;
-      top: 32px; right: 40px;
-      font-family: 'Fraunces', serif;
-      font-size: 120px;
-      font-weight: 900;
-      line-height: 1;
-      color: rgba(200,146,42,0.07);
-    }
-    .testi-stars { margin-bottom: 24px; color: var(--gold); letter-spacing: 2px; font-size: 13px; }
-    .testi-text {
-      font-family: 'Fraunces', serif;
-      font-size: 20px;
-      font-style: italic;
-      font-weight: 300;
-      line-height: 1.6;
-      color: var(--cream-dim);
-      margin-bottom: 32px;
-    }
-    .testi-author { display: flex; align-items: center; gap: 14px; }
-    .testi-avatar {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      background: var(--surface3);
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-    }
-    .testi-name { font-size: 14px; font-weight: 600; }
-    .testi-event { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    /* Wide third testimonial */
-    .testi-card.wide { grid-column: span 2; background: var(--deep); }
-
-    /* ── CTA ── */
-    #cta {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-      position: relative;
-    }
-    .cta-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 100% at 50% 50%, rgba(200,146,42,0.1) 0%, transparent 70%);
-    }
-    .cta-inner {
-      position: relative;
-      z-index: 1;
-      padding: 120px 0;
-      text-align: center;
-    }
-    .cta-eyebrow {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 24px;
-    }
-    .cta-h2 {
-      font-family: 'Fraunces', serif;
-      font-optical-sizing: auto;
-      font-size: clamp(48px, 6vw, 80px);
-      font-weight: 900;
-      line-height: 1.0;
-      letter-spacing: -0.025em;
-      margin-bottom: 20px;
-    }
-    .cta-h2 em { font-style: italic; color: var(--gold); font-weight: 300; }
-    .cta-sub { font-size: 17px; color: var(--muted); margin-bottom: 48px; font-weight: 300; }
-    .cta-contact {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-top: 40px;
-      padding-top: 40px;
-      border-top: 1px solid var(--border);
-    }
-    .cta-contact a {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.25s;
-    }
-    .cta-contact a:hover { color: var(--gold); }
-
-    /* ── CONTACT ── */
-    #contact { background: var(--ink); }
-    .contact-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 80px;
-      align-items: start;
-    }
-    .contact-info { padding-top: 8px; }
-    .contact-detail-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-top: 40px;
-    }
-    .cd-item {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .cd-icon {
-      width: 40px; height: 40px;
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-    .cd-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-    .cd-val { font-size: 15px; }
-    .cd-val a { color: var(--cream); text-decoration: none; transition: color 0.25s; }
-    .cd-val a:hover { color: var(--gold); }
-    .contact-form-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 56px;
-    }
-    .form-h { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; margin-bottom: 40px; }
-    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .f-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-    .f-group.full { grid-column: 1/-1; }
-    .f-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
-    input, select, textarea {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--cream);
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 300;
-      padding: 14px 18px;
-      outline: none;
-      border-radius: 0;
-      width: 100%;
-      transition: border-color 0.25s;
-      -webkit-appearance: none;
-    }
-    input:focus, select:focus, textarea:focus { border-color: var(--gold); }
-    select option { background: var(--surface2); }
-    textarea { resize: vertical; min-height: 110px; }
-    .f-submit {
-      width: 100%;
-      background: var(--gold);
-      color: var(--ink);
-      border: none;
-      font-family: 'Outfit', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 18px;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.25s;
-    }
-    .f-submit:hover { background: var(--gold-lt); }
-
-    /* ── FOOTER ── */
-    footer { background: var(--deep); border-top: 1px solid var(--border); }
-    .foot-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 48px;
-      padding: 72px 0 48px;
-      border-bottom: 1px solid var(--border);
-    }
-    .foot-brand-name {
-      font-family: 'Fraunces', serif;
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-      margin-bottom: 12px;
-      color: var(--cream);
-    }
-    .foot-brand-name em { font-style: italic; color: var(--gold); }
-    .foot-brand-desc { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; max-width: 280px; }
-    .foot-socials { display: flex; gap: 10px; margin-top: 24px; }
-    .foot-social {
-      width: 36px; height: 36px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
-      text-decoration: none;
-      transition: border-color 0.25s, background 0.25s, transform 0.2s;
-    }
-    .foot-social:hover { border-color: var(--gold); background: rgba(200,146,42,0.08); transform: translateY(-2px); }
-    .foot-col h4 { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
-    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-    .foot-col ul a { font-size: 14px; color: var(--muted); text-decoration: none; font-weight: 300; transition: color 0.25s; }
-    .foot-col ul a:hover { color: var(--gold); }
-    .foot-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 24px 0;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .foot-bottom p { font-size: 12px; color: var(--muted); }
-    .foot-bottom a { color: var(--gold); text-decoration: none; }
-
-    /* ── REVEAL ── */
-    .rev { opacity: 0; transform: translateY(36px); }
-    .rev.in { animation: revIn 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
-    @keyframes revIn { to { opacity: 1; transform: translateY(0); } }
-
-    .rev-l { opacity: 0; transform: translateX(-40px); }
-    .rev-l.in { animation: revL 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
-    @keyframes revL { to { opacity: 1; transform: translateX(0); } }
-
-    .rev-r { opacity: 0; transform: translateX(40px); }
-    .rev-r.in { animation: revR 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
-    @keyframes revR { to { opacity: 1; transform: translateX(0); } }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1024px) {
-      #hero { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
-      .hero-left { padding: 140px 48px 80px; }
-      .about-wrap, .about-left { border-right: none; }
-      .about-wrap { grid-template-columns: 1fr; }
-      .about-left { padding: 80px 0 40px; }
-      .about-right { padding: 0 0 80px; }
-      .bento-head, .cocktails-head, .social-wrap, .process-wrap, .contact-wrap { grid-template-columns: 1fr; }
-      .foot-top { grid-template-columns: 1fr 1fr; }
-      .b-card.c5, .b-card.c4, .b-card.c3, .b-card.c7, .b-card.c8 { grid-column: span 6; }
-    }
-    @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .nav-links { display: none; }
-      .nav-ham { display: flex; }
-      .ctr { padding: 0 24px; }
-      .pad { padding: 80px 0; }
-      .hero-left { padding: 120px 24px 60px; }
-      .b-card.c5, .b-card.c4, .b-card.c3, .b-card.c7, .b-card.c8 { grid-column: span 12; }
-      .b-card.r2 { grid-row: span 1; }
-      .bento { grid-auto-rows: 200px; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .testi-card.wide { grid-column: span 1; }
-      .foot-top { grid-template-columns: 1fr; }
-      .f-row { grid-template-columns: 1fr; }
-      .contact-form-wrap { padding: 32px 24px; }
-      .cta-contact { gap: 20px; }
-      .social-visual { display: none; }
-    }
-  </style>
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .about-inner,.menu-inner,.contact-inner{grid-template-columns:1fr}
+  .about-left,.menu-left,.contact-left{border-right:none;padding:120px 48px 48px}
+  .about-right{padding:0 48px 80px}
+  .menu-right{max-height:none;padding:0 48px 80px}
+  .menu-visual{position:static;transform:none}
+  .contact-right{max-height:none;padding:0 48px 80px}
+  .services-inner{padding:120px 48px 80px}
+  .gallery-inner{padding:120px 48px 80px}
+  .gallery-platforms{grid-template-columns:1fr 1fr}
+  .gallery-embeds{grid-template-columns:1fr}
+  .services-head,.gallery-head{grid-template-columns:1fr}
+  .home-content{padding:0 48px 80px}
+  .home-scroll{right:32px}
+}
+@media(max-width:768px){
+  nav{padding:14px 24px}
+  nav.dark{padding:12px 24px}
+  .nav-links{display:none}
+  .nav-btn.lang-toggle{display:none}
+  .nav-ham{display:flex}
+  .bento{grid-template-columns:1fr}
+  .b.c5,.b.c4,.b.c3,.b.c7,.b.c6{grid-column:span 1}
+  .services-inner,.gallery-inner{padding:100px 24px 60px}
+  .about-left,.about-right,.menu-left,.menu-right,.contact-left,.contact-right,.form-wrap{padding:100px 24px 48px}
+  .home-content{padding:0 24px 60px}
+  .home-socials{display:none}
+  .gallery-platforms{grid-template-columns:1fr}
+  .f-row{grid-template-columns:1fr}
+  .form-wrap{padding:32px 20px}
+  .page-dots{display:none}
+}
+</style>
 </head>
 <body>
 
-<!-- Custom Cursor -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<!-- Cursor -->
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
 
-<!-- ── NAV ── -->
+<!-- Page loader flash -->
+<div class="page-loader" id="loader"><div class="loader-line" id="loaderLine"></div></div>
+
+<!-- Audio — Latin/Peruvian party music (swap src if you want your own track) -->
+<audio id="audio" loop>
+  <source src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Cumbia%20No%20Estres.mp3" type="audio/mpeg">
+  <source src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Latin%20Industries.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ══════════ NAV ══════════ -->
 <nav id="nav">
-  <a href="#" class="nav-logo">Bartenders<em>in</em>Frontera</a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#cocktails">Menu</a></li>
-    <li><a href="#social">Follow</a></li>
-    <li><a href="#contact" class="nav-book">Book Now</a></li>
-  </ul>
-  <button class="nav-ham" id="ham" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="nav-logo" onclick="goTo(0)">Bartenders<em>in</em>Frontera</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="goTo(0)" data-page="0" data-en="Home" data-es="Inicio">Home</button>
+    <button class="nav-link" onclick="goTo(1)" data-page="1" data-en="About" data-es="Nosotros">About</button>
+    <button class="nav-link" onclick="goTo(2)" data-page="2" data-en="Services" data-es="Servicios">Services</button>
+    <button class="nav-link" onclick="goTo(3)" data-page="3" data-en="Menu" data-es="Menú">Menu</button>
+    <button class="nav-link" onclick="goTo(4)" data-page="4" data-en="Gallery" data-es="Galería">Gallery</button>
+    <button class="nav-link" onclick="goTo(5)" data-page="5" data-en="Contact" data-es="Contacto">Contact</button>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-toggle" id="langBtn" onclick="toggleLang()">ES</button>
+    <button class="nav-btn music-btn" id="musicBtn" onclick="toggleMusic()">
+      <div class="music-bars paused" id="musicBars">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <span id="musicLabel" data-en="Music" data-es="Música">Music</span>
+    </button>
+    <button class="book-btn" onclick="goTo(5)" data-en="Book Now" data-es="Reservar">Book Now</button>
+    <button class="nav-ham" id="ham" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+  </div>
 </nav>
 
-<!-- ── HERO ── -->
-<section id="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow" id="ey">NYC Premium Mobile Bar</div>
-    <h1 class="hero-h1" id="hh1">
-      <span class="line"><span>Liquid</span></span>
-      <span class="line"><span><em>Art,</em></span></span>
-      <span class="line"><span>Crafted</span></span>
-      <span class="line"><span>for You.</span></span>
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-link active" onclick="goTo(0);toggleMobileNav()" data-en="Home" data-es="Inicio">Home</button>
+  <button class="mobile-nav-link" onclick="goTo(1);toggleMobileNav()" data-en="About" data-es="Nosotros">About</button>
+  <button class="mobile-nav-link" onclick="goTo(2);toggleMobileNav()" data-en="Services" data-es="Servicios">Services</button>
+  <button class="mobile-nav-link" onclick="goTo(3);toggleMobileNav()" data-en="Menu" data-es="Menú">Menu</button>
+  <button class="mobile-nav-link" onclick="goTo(4);toggleMobileNav()" data-en="Gallery" data-es="Galería">Gallery</button>
+  <button class="mobile-nav-link" onclick="goTo(5);toggleMobileNav()" data-en="Contact" data-es="Contacto">Contact</button>
+  <button class="nav-btn lang-toggle" onclick="toggleLang()" style="margin-top:16px">ES / EN</button>
+</div>
+
+<!-- Page dots -->
+<div class="page-dots" id="pageDots">
+  <div class="dot active" onclick="goTo(0)" title="Home"></div>
+  <div class="dot" onclick="goTo(1)" title="About"></div>
+  <div class="dot" onclick="goTo(2)" title="Services"></div>
+  <div class="dot" onclick="goTo(3)" title="Menu"></div>
+  <div class="dot" onclick="goTo(4)" title="Gallery"></div>
+  <div class="dot" onclick="goTo(5)" title="Contact"></div>
+</div>
+
+<!-- Global video background — fixed, always behind all pages -->
+<div class="global-video-bg" id="globalVideoBg">
+  <iframe
+    src="https://www.youtube.com/embed/9cJ3frvZwQM?autoplay=1&mute=1&loop=1&playlist=9cJ3frvZwQM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 0 — HOME
+══════════════════════════════ -->
+<div class="pages-wrap">
+
+<div class="page active" id="page-home">
+  <!-- Left social icons -->
+  <div class="home-socials">
+    <a class="home-social-icon" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener" title="Instagram">📸</a>
+    <a class="home-social-icon" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener" title="TikTok">🎵</a>
+    <a class="home-social-icon" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener" title="YouTube">▶️</a>
+    <a class="home-social-icon" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener" title="Facebook">👥</a>
+  </div>
+  <div class="home-content">
+    <div class="home-eyebrow" id="h-eyebrow" data-en="NYC Premium Mobile Bar" data-es="Bar Móvil Premium en NYC">NYC Premium Mobile Bar</div>
+    <h1 class="home-h1" id="h-h1">
+      <span class="line" data-en-line="Liquid" data-es-line="Arte"><span>Liquid</span></span>
+      <span class="line" data-en-line="Art," data-es-line="Líquido,"><span><em>Art,</em></span></span>
+      <span class="line" data-en-line="Crafted" data-es-line="Creado"><span>Crafted</span></span>
+      <span class="line" data-en-line="for You." data-es-line="para Ti."><span>for You.</span></span>
     </h1>
-    <p class="hero-desc" id="hdesc">Premium mobile bartending for weddings, private parties, corporate events, and every occasion worth celebrating — across all five boroughs.</p>
-    <div class="hero-ctas" id="hcta">
-      <a href="#contact" class="btn-gold">Book Your Event ↗</a>
-      <a href="#social" class="btn-ghost">See Our Work →</a>
+    <p class="home-sub" id="h-sub" data-en="Premium mobile bartending for weddings, private parties, corporate events — across all five boroughs." data-es="Bartending móvil premium para bodas, fiestas privadas y eventos corporativos — en los cinco condados.">Premium mobile bartending for weddings, private parties, corporate events — across all five boroughs.</p>
+    <div class="home-ctas" id="h-ctas">
+      <button class="btn-gold" onclick="goTo(5)" data-en="Book Your Event ↗" data-es="Reserva Tu Evento ↗">Book Your Event ↗</button>
+      <button class="btn-ghost" onclick="goTo(4)" data-en="See Our Work →" data-es="Ver Nuestro Trabajo →">See Our Work →</button>
     </div>
   </div>
-
-  <div class="hero-right">
-    <div class="hero-right-bg"></div>
-    <div class="hero-art" id="hart">
-      <div class="hero-art-ring r1"></div>
-      <div class="hero-art-ring r2"></div>
-      <div class="hero-art-ring r3"></div>
-      <div class="hero-art-icon">🍸</div>
-    </div>
-    <div class="hero-tag">New York City</div>
-    <div class="hero-scroll-counter">
-      <div class="scroll-num">01</div>
-      <div class="scroll-line"></div>
-    </div>
-  </div>
-  <div class="hero-year">Est. NYC</div>
-</section>
-
-<!-- ── TICKER ── -->
-<div class="ticker">
-  <div class="ticker-track" id="tick">
-    <span class="ticker-item">Weddings <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Private Parties <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Corporate Events <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Mobile Bar Setup <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Custom Cocktails <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Mixology Workshops <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Rooftop Events <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Birthdays <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Weddings <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Private Parties <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Corporate Events <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Mobile Bar Setup <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Custom Cocktails <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Mixology Workshops <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Rooftop Events <span class="ticker-sep">✦</span></span>
-    <span class="ticker-item">Birthdays <span class="ticker-sep">✦</span></span>
+  <div class="home-scroll">
+    <span data-en="Scroll" data-es="Bajar">Scroll</span>
+    <div class="scroll-pulse"></div>
   </div>
 </div>
 
-<!-- ── ABOUT ── -->
-<section id="about">
-  <div class="ctr">
-    <div class="about-wrap">
-      <div class="about-left">
-        <div class="s-label rev">Our Story</div>
-        <span class="about-big-num rev">BIF</span>
-        <div class="about-stats-row rev">
-          <div class="stat-box">
-            <div class="stat-n" data-target="500">0</div>
-            <div class="stat-l">Events Served</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-n" data-target="5000">0</div>
-            <div class="stat-l">Happy Guests</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-n" data-target="200">0</div>
-            <div class="stat-l">Signature Recipes</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-n" data-target="5">0</div>
-            <div class="stat-l">NYC Boroughs</div>
-          </div>
-        </div>
+<!-- ══════════════════════════════
+     PAGE 1 — ABOUT
+══════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="about-inner">
+    <div class="about-left">
+      <div class="s-tag rev" data-en="Our Story" data-es="Nuestra Historia">Our Story</div>
+      <h2 class="s-h2 rev" data-en="Where <em>Passion</em><br>Meets the Pour" data-es="Donde la <em>Pasión</em><br>se Encuentra">Where <em>Passion</em><br>Meets the Pour</h2>
+      <p class="s-body rev" data-en="Bartenders in Frontera was born from a relentless pursuit of the perfect cocktail experience. Based in New York City, we bring a full mobile bar directly to your event — premium spirits, fresh ingredients, and bartenders who treat every glass as a canvas." data-es="Bartenders in Frontera nació de una búsqueda implacable de la experiencia de cóctel perfecta. Con sede en Nueva York, llevamos un bar móvil completo directamente a su evento — licores premium, ingredientes frescos y bartenders que tratan cada copa como un lienzo.">Bartenders in Frontera was born from a relentless pursuit of the perfect cocktail experience. Based in New York City, we bring a full mobile bar directly to your event — premium spirits, fresh ingredients, and bartenders who treat every glass as a canvas.</p>
+      <p class="s-body rev" data-en="From intimate Brooklyn dinner parties to Manhattan rooftop galas, we've built a reputation that speaks through every sip." data-es="Desde íntimas cenas en Brooklyn hasta galas en azoteas de Manhattan, hemos construido una reputación que habla a través de cada sorbo.">From intimate Brooklyn dinner parties to Manhattan rooftop galas, we've built a reputation that speaks through every sip.</p>
+      <div class="about-stats rev">
+        <div class="stat-box"><div class="stat-n" data-target="500">0</div><div class="stat-l" data-en="Events Served" data-es="Eventos">Events Served</div></div>
+        <div class="stat-box"><div class="stat-n" data-target="5000">0</div><div class="stat-l" data-en="Happy Guests" data-es="Invitados">Happy Guests</div></div>
+        <div class="stat-box"><div class="stat-n" data-target="200">0</div><div class="stat-l" data-en="Recipes" data-es="Recetas">Recipes</div></div>
+        <div class="stat-box"><div class="stat-n" data-target="5">0</div><div class="stat-l" data-en="NYC Boroughs" data-es="Condados NYC">NYC Boroughs</div></div>
       </div>
-      <div class="about-right">
-        <p class="about-pull rev-r">
-          Where <strong>precision</strong> meets passion — every pour tells a story.
-        </p>
-        <p class="about-body rev-r">
-          Bartenders in Frontera was born from a love of craft and a relentless pursuit of the perfect cocktail experience. Based in New York City, we bring a full mobile bar operation directly to your event — equipped with premium spirits, fresh ingredients, and bartenders who treat every glass as a canvas.
-        </p>
-        <p class="about-body rev-r" style="margin-top:20px">
-          From intimate Brooklyn dinner parties to Manhattan rooftop galas, we've served thousands of guests and built a reputation that speaks through every sip.
-        </p>
-        <div style="display:flex; gap:16px; margin-top:40px;" class="rev-r">
-          <a href="#contact" class="btn-gold">Start Planning</a>
-          <a href="#social" class="btn-ghost">View Our Work →</a>
+    </div>
+    <div class="about-right">
+      <div class="about-right-bg"></div>
+      <!-- YouTube embed in about -->
+      <div class="about-video-frame rev-r">
+        <iframe src="https://www.youtube.com/embed/KWKUnqEtmdk?controls=1&rel=0&modestbranding=1" allow="fullscreen" allowfullscreen></iframe>
+        <div class="about-video-overlay"></div>
+      </div>
+      <div style="margin-top:32px;">
+        <p style="font-family:'Fraunces',serif;font-size:clamp(22px,3vw,36px);font-weight:300;font-style:italic;color:var(--dim);line-height:1.4;letter-spacing:-.01em" class="rev-r" data-en='"Every event is a stage. Every cocktail is a performance."' data-es='"Cada evento es un escenario. Cada cóctel es una actuación."'>"Every event is a stage. Every cocktail is a performance."</p>
+        <div style="margin-top:32px;display:flex;gap:16px" class="rev-r">
+          <button class="btn-gold" onclick="goTo(5)" data-en="Book Now" data-es="Reservar">Book Now</button>
+          <button class="btn-ghost" onclick="goTo(2)" data-en="See Services →" data-es="Ver Servicios →">See Services →</button>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── SERVICES ── -->
-<section id="services" class="pad">
-  <div class="ctr">
-    <div class="bento-head">
+<!-- ══════════════════════════════
+     PAGE 2 — SERVICES
+══════════════════════════════ -->
+<div class="page" id="page-services">
+  <div class="services-inner">
+    <div class="services-head">
       <div>
-        <div class="s-label rev">What We Do</div>
-        <h2 class="s-h2 rev">Services Built<br>for <em>Every</em> Moment</h2>
+        <div class="s-tag rev" data-en="What We Do" data-es="Lo Que Hacemos">What We Do</div>
+        <h2 class="s-h2 rev" data-en="Services Built for<br>Every <em>Occasion</em>" data-es="Servicios para<br>Cada <em>Ocasión</em>">Services Built for<br>Every <em>Occasion</em></h2>
       </div>
-      <p class="s-body rev">We handle the bar so you can focus on the celebration. Every service is fully customized to your event.</p>
+      <p class="s-body rev" data-en="We handle the bar so you can focus on the celebration. Every service is fully customized to match your vision." data-es="Nosotros nos encargamos del bar para que puedas disfrutar la celebración. Cada servicio es completamente personalizado.">We handle the bar so you can focus on the celebration. Every service is fully customized to match your vision.</p>
     </div>
     <div class="bento rev">
-      <div class="b-card c5 featured">
-        <div class="b-num">01</div>
+      <div class="b c5 big">
+        <div class="b-n">01</div>
         <div class="b-icon">💍</div>
-        <div class="b-title">Wedding Bar Service</div>
-        <div class="b-desc">Full-service wedding bar with custom cocktail menu, signature drinks, and professional staff tailored to your theme.</div>
+        <div class="b-title" data-en="Wedding Bar Service" data-es="Servicio de Bar para Bodas">Wedding Bar Service</div>
+        <div class="b-desc" data-en="Full-service wedding bar with custom cocktail menu, signature drinks, and professional staff tailored to your special day." data-es="Bar completo para bodas con menú personalizado, bebidas exclusivas y personal profesional para tu día especial.">Full-service wedding bar with custom cocktail menu, signature drinks, and professional staff tailored to your special day.</div>
       </div>
-      <div class="b-card c4">
-        <div class="b-num">02</div>
+      <div class="b c4">
+        <div class="b-n">02</div>
         <div class="b-icon">🎉</div>
-        <div class="b-title">Private Parties</div>
-        <div class="b-desc">From intimate birthdays to grand celebrations — we bring the bar to you, fully equipped.</div>
+        <div class="b-title" data-en="Private Parties" data-es="Fiestas Privadas">Private Parties</div>
+        <div class="b-desc" data-en="From birthday blowouts to anniversary dinners — we bring the bar to you, fully equipped and ready." data-es="Desde fiestas de cumpleaños hasta cenas de aniversario — llevamos el bar a ti, completamente equipado.">From birthday blowouts to anniversary dinners — we bring the bar to you, fully equipped and ready.</div>
       </div>
-      <div class="b-card c3">
-        <div class="b-num">03</div>
+      <div class="b c3">
+        <div class="b-n">03</div>
         <div class="b-icon">🏢</div>
-        <div class="b-title">Corporate</div>
-        <div class="b-desc">Elevate your next company event with professional bartenders who know how to work a room.</div>
+        <div class="b-title" data-en="Corporate Events" data-es="Eventos Corporativos">Corporate Events</div>
+        <div class="b-desc" data-en="Elevate your company event with professional bartenders who know how to work a crowd." data-es="Eleva tu evento corporativo con bartenders profesionales.">Elevate your company event with professional bartenders who know how to work a crowd.</div>
       </div>
-      <div class="b-card c3">
-        <div class="b-num">04</div>
+      <div class="b c3">
+        <div class="b-n">04</div>
         <div class="b-icon">🚐</div>
-        <div class="b-title">Mobile Bar</div>
-        <div class="b-desc">Stunning mobile bar setup delivered anywhere — indoor, outdoor, rooftop.</div>
+        <div class="b-title" data-en="Mobile Bar" data-es="Bar Móvil">Mobile Bar</div>
+        <div class="b-desc" data-en="Stunning mobile bar setup — indoor, outdoor, rooftop, backyard. We come to you." data-es="Bar móvil impresionante — en interiores, exteriores, azoteas o jardines.">Stunning mobile bar setup — indoor, outdoor, rooftop, backyard. We come to you.</div>
       </div>
-      <div class="b-card c5">
-        <div class="b-num">05</div>
+      <div class="b c6">
+        <div class="b-n">05</div>
         <div class="b-icon">🍸</div>
-        <div class="b-title">Custom Cocktail Menus</div>
-        <div class="b-desc">Work with our mixologists to create a bespoke cocktail menu that reflects your event's unique personality and story.</div>
+        <div class="b-title" data-en="Custom Cocktail Menus" data-es="Menús Personalizados">Custom Cocktail Menus</div>
+        <div class="b-desc" data-en="Work with our mixologists to craft a bespoke cocktail menu — themed drinks that reflect your event's personality." data-es="Trabaja con nuestros mixólogos para crear un menú de cócteles único que refleje la personalidad de tu evento.">Work with our mixologists to craft a bespoke cocktail menu — themed drinks that reflect your event's personality.</div>
       </div>
-      <div class="b-card c4">
-        <div class="b-num">06</div>
+      <div class="b c6">
+        <div class="b-n">06</div>
         <div class="b-icon">🎓</div>
-        <div class="b-title">Mixology Workshops</div>
-        <div class="b-desc">Interactive cocktail classes — perfect for team building, bachelorette parties, or anyone looking to shake things up.</div>
+        <div class="b-title" data-en="Mixology Workshops" data-es="Talleres de Mixología">Mixology Workshops</div>
+        <div class="b-desc" data-en="Interactive cocktail classes — perfect for team building, bachelorette parties, date nights, or anyone who wants to shake things up." data-es="Clases interactivas de cócteles — perfectas para team building, despedidas de soltera o cualquiera que quiera aprender.">Interactive cocktail classes — perfect for team building, bachelorette parties, date nights, or anyone who wants to shake things up.</div>
+      </div>
+    </div>
+    <div style="margin-top:40px;display:flex;gap:16px" class="rev">
+      <button class="btn-gold" onclick="goTo(5)" data-en="Get a Quote →" data-es="Cotizar →">Get a Quote →</button>
+      <button class="btn-ghost" onclick="goTo(3)" data-en="View Our Menu →" data-es="Ver el Menú →">View Our Menu →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 3 — MENU
+══════════════════════════════ -->
+<div class="page" id="page-menu">
+  <div class="menu-inner">
+    <div class="menu-left">
+      <div class="s-tag rev" data-en="Signature Cocktails" data-es="Cócteles Exclusivos">Signature Cocktails</div>
+      <h2 class="s-h2 rev" data-en="Drinks That<br><em>Define</em> the Night" data-es="Bebidas que<br><em>Definen</em> la Noche">Drinks That<br><em>Define</em> the Night</h2>
+      <p class="s-body rev" data-en="Every cocktail is a composition — premium spirits, fresh ingredients, and seasonal flavors. Ask us about building a custom menu for your event." data-es="Cada cóctel es una composición — licores premium, ingredientes frescos y sabores de temporada. Pregúntanos sobre crear un menú personalizado.">Every cocktail is a composition — premium spirits, fresh ingredients, and seasonal flavors. Ask us about building a custom menu for your event.</p>
+      <div class="menu-visual rev">
+        <div class="cocktail-display">
+          <div class="cocktail-glow"></div>
+          <span class="cocktail-emoji-big" id="cocktailEmoji">🍸</span>
+        </div>
+      </div>
+      <div class="menu-bg-text">BIF</div>
+    </div>
+    <div class="menu-right">
+      <div class="cocktail-item rev" onmouseenter="setEmoji('🥃')">
+        <div class="c-n">01</div>
+        <div><div class="c-name" data-en="Frontera Old Fashioned" data-es="Old Fashioned Frontera">Frontera Old Fashioned</div><div class="c-desc" data-en="Aged bourbon · demerara syrup · Angostura bitters · smoked orange peel" data-es="Bourbon añejo · sirope de demerara · amargo Angostura · cáscara de naranja ahumada">Aged bourbon · demerara syrup · Angostura bitters · smoked orange peel</div></div>
+        <div class="c-tag" data-en="Signature" data-es="Exclusivo">Signature</div>
+      </div>
+      <div class="cocktail-item rev" onmouseenter="setEmoji('🍹')">
+        <div class="c-n">02</div>
+        <div><div class="c-name" data-en="Mango Jalapeño Margarita" data-es="Margarita Mango Jalapeño">Mango Jalapeño Margarita</div><div class="c-desc" data-en="Reposado tequila · fresh mango · jalapeño · lime · tajín rim" data-es="Tequila reposado · mango fresco · jalapeño · limón · borde de tajín">Reposado tequila · fresh mango · jalapeño · lime · tajín rim</div></div>
+        <div class="c-tag" data-en="Fan Favorite" data-es="Favorito">Fan Favorite</div>
+      </div>
+      <div class="cocktail-item rev" onmouseenter="setEmoji('🫧')">
+        <div class="c-n">03</div>
+        <div><div class="c-name" data-en="NYC Violet Spritz" data-es="Spritz Violeta NYC">NYC Violet Spritz</div><div class="c-desc" data-en="Empress gin · elderflower · butterfly pea · prosecco · lemon" data-es="Ginebra Empress · flor de saúco · guisante mariposa · prosecco · limón">Empress gin · elderflower · butterfly pea · prosecco · lemon</div></div>
+        <div class="c-tag" data-en="Wedding Pick" data-es="Para Bodas">Wedding Pick</div>
+      </div>
+      <div class="cocktail-item rev" onmouseenter="setEmoji('🧉')">
+        <div class="c-n">04</div>
+        <div><div class="c-name" data-en="Coconut Mezcal Mule" data-es="Mule de Mezcal y Coco">Coconut Mezcal Mule</div><div class="c-desc" data-en="Mezcal · coconut water · ginger beer · lime · mint · coconut foam" data-es="Mezcal · agua de coco · ginger beer · limón · menta · espuma de coco">Mezcal · coconut water · ginger beer · lime · mint · coconut foam</div></div>
+        <div class="c-tag" data-en="Seasonal" data-es="Temporada">Seasonal</div>
+      </div>
+      <div class="cocktail-item rev" onmouseenter="setEmoji('🍊')">
+        <div class="c-n">05</div>
+        <div><div class="c-name" data-en="Passion Fruit Paloma" data-es="Paloma de Maracuyá">Passion Fruit Paloma</div><div class="c-desc" data-en="Blanco tequila · passion fruit · grapefruit · sea salt · agave · sparkling" data-es="Tequila blanco · maracuyá · toronja · sal marina · agave · agua mineral">Blanco tequila · passion fruit · grapefruit · sea salt · agave · sparkling</div></div>
+        <div class="c-tag" data-en="House Special" data-es="Especial de la Casa">House Special</div>
+      </div>
+      <div class="cocktail-item rev" onmouseenter="setEmoji('🍷')">
+        <div class="c-n">06</div>
+        <div><div class="c-name" data-en="Sangria Frontera" data-es="Sangría Frontera">Sangria Frontera</div><div class="c-desc" data-en="Red wine · brandy · seasonal fruits · citrus · house spice blend" data-es="Vino tinto · brandy · frutas de temporada · cítricos · mezcla de especias">Red wine · brandy · seasonal fruits · citrus · house spice blend</div></div>
+        <div class="c-tag" data-en="Pitcher Option" data-es="Para Grupos">Pitcher Option</div>
+      </div>
+      <div style="padding:32px 0">
+        <button class="btn-gold" onclick="goTo(5)" data-en="Request Custom Menu →" data-es="Solicitar Menú Personalizado →">Request Custom Menu →</button>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── COCKTAILS ── -->
-<section id="cocktails" class="pad">
-  <div class="ctr">
-    <div class="cocktails-head">
-      <div>
-        <div class="s-label rev">Signature Menu</div>
-        <h2 class="s-h2 rev">Drinks That<br><em>Define</em> the Night</h2>
-      </div>
-      <p class="s-body rev">Every cocktail is a composition. Premium spirits, fresh ingredients, seasonal flavors — drinks as beautiful as they are delicious.</p>
+<!-- ══════════════════════════════
+     PAGE 4 — GALLERY
+══════════════════════════════ -->
+<div class="page" id="page-gallery">
+  <div class="gallery-inner">
+    <div class="gallery-head">
+      <div class="s-tag rev" data-en="Follow the Journey" data-es="Síguenos">Follow the Journey</div>
+      <h2 class="s-h2 rev" data-en="See Us <em>Live</em> in Action" data-es="Míranos <em>en Vivo</em>">See Us <em>Live</em> in Action</h2>
     </div>
-    <div class="cocktail-list rev">
-      <div class="cocktail-row">
-        <div class="c-num">01</div>
-        <div class="c-info">
-          <div class="c-name">The Frontera Old Fashioned</div>
-          <div class="c-desc">Aged bourbon · house-made demerara syrup · Angostura bitters · smoked orange peel</div>
-        </div>
-        <div class="c-tag">Signature</div>
+    <!-- Platform links -->
+    <div class="gallery-platforms rev">
+      <div class="platform-panel">
+        <div class="platform-header"><div class="platform-icon">📸</div><div><div class="platform-name">Instagram</div><div class="platform-handle">@bartendersinfrontera</div></div></div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;font-weight:300" data-en="Behind-the-scenes moments, cocktail crafting, and event highlights." data-es="Momentos detrás de escena, creación de cócteles y momentos de eventos.">Behind-the-scenes moments, cocktail crafting, and event highlights.</p>
+        <a class="platform-cta" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener" data-en="Follow on Instagram →" data-es="Seguir en Instagram →">Follow on Instagram →</a>
       </div>
-      <div class="cocktail-row">
-        <div class="c-num">02</div>
-        <div class="c-info">
-          <div class="c-name">Mango Jalapeño Margarita</div>
-          <div class="c-desc">Reposado tequila · fresh mango purée · jalapeño · lime · tajín rim</div>
-        </div>
-        <div class="c-tag">Fan Favorite</div>
+      <div class="platform-panel">
+        <div class="platform-header"><div class="platform-icon">🎵</div><div><div class="platform-name">TikTok</div><div class="platform-handle">@bartendersinfronterany</div></div></div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;font-weight:300" data-en="Viral cocktail content, tutorials, and event energy. Watch and share." data-es="Contenido viral de cócteles, tutoriales y energía de eventos.">Viral cocktail content, tutorials, and event energy. Watch and share.</p>
+        <a class="platform-cta" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener" data-en="Follow on TikTok →" data-es="Seguir en TikTok →">Follow on TikTok →</a>
       </div>
-      <div class="cocktail-row">
-        <div class="c-num">03</div>
-        <div class="c-info">
-          <div class="c-name">NYC Violet Spritz</div>
-          <div class="c-desc">Empress gin · elderflower liqueur · butterfly pea flower · prosecco · lemon twist</div>
-        </div>
-        <div class="c-tag">Wedding Pick</div>
-      </div>
-      <div class="cocktail-row">
-        <div class="c-num">04</div>
-        <div class="c-info">
-          <div class="c-name">Coconut Mezcal Mule</div>
-          <div class="c-desc">Mezcal · coconut water · ginger beer · lime · fresh mint · coconut foam</div>
-        </div>
-        <div class="c-tag">Seasonal</div>
-      </div>
-      <div class="cocktail-row">
-        <div class="c-num">05</div>
-        <div class="c-info">
-          <div class="c-name">Passion Fruit Paloma</div>
-          <div class="c-desc">Blanco tequila · fresh passion fruit · grapefruit · sea salt · agave · sparkling water</div>
-        </div>
-        <div class="c-tag">House Special</div>
+      <div class="platform-panel">
+        <div class="platform-header"><div class="platform-icon">▶️</div><div><div class="platform-name">YouTube</div><div class="platform-handle">@bartendersinfronterany</div></div></div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;font-weight:300" data-en="Full event coverage, cocktail masterclasses, and brand films." data-es="Cobertura completa de eventos, clases magistrales de cócteles y films.">Full event coverage, cocktail masterclasses, and brand films.</p>
+        <a class="platform-cta" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener" data-en="Watch on YouTube →" data-es="Ver en YouTube →">Watch on YouTube →</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ── SOCIAL ── -->
-<section id="social" class="pad">
-  <div class="ctr">
-    <div class="social-wrap">
-      <div>
-        <div class="s-label rev">Follow the Journey</div>
-        <h2 class="s-h2 rev">See Us <em>Live</em><br>in Action</h2>
-        <div class="social-platforms-list rev">
-          <a class="platform-row" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener">
-            <div class="pl-left">
-              <div class="pl-icon">📸</div>
-              <div>
-                <div class="pl-name">Instagram</div>
-                <div class="pl-handle">@bartendersinfrontera</div>
-              </div>
-            </div>
-            <div class="pl-arrow">→</div>
-          </a>
-          <a class="platform-row" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener">
-            <div class="pl-left">
-              <div class="pl-icon">🎵</div>
-              <div>
-                <div class="pl-name">TikTok</div>
-                <div class="pl-handle">@bartendersinfronterany</div>
-              </div>
-            </div>
-            <div class="pl-arrow">→</div>
-          </a>
-          <a class="platform-row" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener">
-            <div class="pl-left">
-              <div class="pl-icon">▶️</div>
-              <div>
-                <div class="pl-name">YouTube</div>
-                <div class="pl-handle">@bartendersinfronterany</div>
-              </div>
-            </div>
-            <div class="pl-arrow">→</div>
-          </a>
-          <a class="platform-row" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener">
-            <div class="pl-left">
-              <div class="pl-icon">👥</div>
-              <div>
-                <div class="pl-name">Facebook</div>
-                <div class="pl-handle">Bartenders in Frontera</div>
-              </div>
-            </div>
-            <div class="pl-arrow">→</div>
-          </a>
+    <!-- Embeds -->
+    <div class="gallery-embeds">
+      <div class="embed-col">
+        <div class="embed-title" data-en="Latest Videos" data-es="Últimos Videos">Latest Videos</div>
+        <div class="yt-wrap rev">
+          <iframe src="https://www.youtube.com/embed/9cJ3frvZwQM?rel=0&modestbranding=1" allow="fullscreen" allowfullscreen></iframe>
+        </div>
+        <div class="yt-wrap rev" style="margin-top:16px">
+          <iframe src="https://www.youtube.com/embed/KWKUnqEtmdk?rel=0&modestbranding=1" allow="fullscreen" allowfullscreen></iframe>
         </div>
       </div>
-      <div class="social-visual rev-r">
-        <div class="social-frame">
-          <div class="social-big-icon">🍹</div>
-          <div class="social-frame-label">"Follow us for cocktail content"</div>
-          <a class="social-frame-cta" href="https://www.instagram.com/bartendersinfrontera" target="_blank">View Instagram →</a>
+      <div class="embed-col">
+        <div class="embed-title" data-en="TikTok" data-es="TikTok">TikTok</div>
+        <div class="social-embed-wrap rev">
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@bartendersinfronterany" data-unique-id="bartendersinfronterany" data-embed-type="creator" style="max-width:100%;min-width:288px;border:none;">
+            <section><a target="_blank" href="https://www.tiktok.com/@bartendersinfronterany?refer=creator_embed">@bartendersinfronterany</a></section>
+          </blockquote>
+          <script async src="https://www.tiktok.com/embed.js"></script>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── PROCESS ── -->
-<section id="process" class="pad">
-  <div class="ctr">
-    <div class="process-wrap">
-      <div class="process-left">
-        <div class="s-label rev">How It Works</div>
-        <h2 class="s-h2 rev">From <em>Inquiry</em><br>to Last Call</h2>
-        <p class="s-body rev" style="margin-top:24px">Four simple steps stand between you and the perfect bar experience.</p>
-      </div>
-      <div class="process-steps rev">
-        <div class="p-step active">
-          <div class="p-n">01</div>
-          <div>
-            <div class="p-title">Reach Out</div>
-            <div class="p-desc">Fill out our inquiry form or call/text us directly. Tell us about your event date, size, and vision — the more detail, the better.</div>
-          </div>
-        </div>
-        <div class="p-step">
-          <div class="p-n">02</div>
-          <div>
-            <div class="p-title">Custom Proposal</div>
-            <div class="p-desc">We craft a tailored cocktail menu and package proposal specifically for your event. Usually within 24 hours.</div>
-          </div>
-        </div>
-        <div class="p-step">
-          <div class="p-n">03</div>
-          <div>
-            <div class="p-title">Lock It In</div>
-            <div class="p-desc">Sign the contract, pay the deposit, and your date is secured. We handle all the logistics from here.</div>
-          </div>
-        </div>
-        <div class="p-step">
-          <div class="p-n">04</div>
-          <div>
-            <div class="p-title">Raise a Glass</div>
-            <div class="p-desc">We arrive early, set up beautifully, and pour all night. You focus on enjoying every moment.</div>
+        <div style="margin-top:16px">
+          <div class="embed-title" data-en="Instagram" data-es="Instagram">Instagram</div>
+          <div style="background:var(--surface);border:1px solid var(--border);padding:24px;text-align:center">
+            <a href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;color:var(--cream);text-decoration:none;font-size:14px">
+              <span style="font-size:28px">📸</span>
+              <span data-en="View @bartendersinfrontera on Instagram" data-es="Ver @bartendersinfrontera en Instagram">View @bartendersinfrontera on Instagram</span>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── TESTIMONIALS ── -->
-<section id="testimonials" class="pad">
-  <div class="ctr">
-    <div class="s-label rev">What People Say</div>
-    <h2 class="s-h2 rev">Every Event, <em>Unforgettable</em></h2>
-    <div class="testi-grid rev">
-      <div class="testi-card">
-        <div class="testi-quote">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Bartenders in Frontera made our wedding reception absolutely magical. The signature cocktails were a hit and the bartenders were professional, fun, and incredibly talented."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">👰</div>
-          <div>
-            <div class="testi-name">Maria & Carlos R.</div>
-            <div class="testi-event">Wedding Reception — Brooklyn</div>
-          </div>
+<!-- ══════════════════════════════
+     PAGE 5 — CONTACT
+══════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <div class="contact-left-bg"></div>
+      <div style="position:relative;z-index:1">
+        <div class="s-tag rev" data-en="Get in Touch" data-es="Contáctanos">Get in Touch</div>
+        <h2 class="s-h2 rev" data-en="Let's Make Your<br>Event <em>Legendary</em>" data-es="Hagamos Tu<br>Evento <em>Legendario</em>">Let's Make Your<br>Event <em>Legendary</em></h2>
+        <p class="s-body rev" data-en="Ready to elevate your event? Reach out and let's create something unforgettable." data-es="¿Listo para elevar tu evento? Contáctanos y creemos algo inolvidable.">Ready to elevate your event? Reach out and let's create something unforgettable.</p>
+        <div class="contact-details">
+          <div class="cd rev"><div class="cd-icon">📞</div><div><div class="cd-label" data-en="Phone / Text" data-es="Teléfono / Mensaje">Phone / Text</div><div class="cd-val"><a href="tel:6462205276">(646) 220-5276</a></div></div></div>
+          <div class="cd rev"><div class="cd-icon">✉️</div><div><div class="cd-label">Email</div><div class="cd-val"><a href="mailto:Bartendersinfrontera@gmail.com">Bartendersinfrontera@gmail.com</a></div></div></div>
+          <div class="cd rev"><div class="cd-icon">📍</div><div><div class="cd-label" data-en="Service Area" data-es="Área de Servicio">Service Area</div><div class="cd-val" data-en="All 5 NYC Boroughs & Tri-State" data-es="Los 5 Condados de NYC y área Tri-State">All 5 NYC Boroughs & Tri-State</div></div></div>
+          <div class="cd rev"><div class="cd-icon">⚡</div><div><div class="cd-label" data-en="Response Time" data-es="Tiempo de Respuesta">Response Time</div><div class="cd-val" data-en="Within a few hours" data-es="En pocas horas">Within a few hours</div></div></div>
         </div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-quote">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Hired them for our company's rooftop holiday party. Everyone was blown away by the quality of the drinks and the energy of the bartenders. Will absolutely book again."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">🏢</div>
-          <div>
-            <div class="testi-name">James T.</div>
-            <div class="testi-event">Corporate Holiday Party — Manhattan</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card wide">
-        <div class="testi-quote">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text" style="font-size:24px;">"The mango jalapeño margaritas alone were worth every penny. My birthday party was the talk of my friend group for weeks. These guys know their craft better than anyone I've worked with."</p>
-        <div class="testi-author" style="margin-top:32px;">
-          <div class="testi-avatar">🎂</div>
-          <div>
-            <div class="testi-name">Destiny M.</div>
-            <div class="testi-event">30th Birthday Party — Queens</div>
-          </div>
+        <div class="contact-socials rev">
+          <a class="cs-icon" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener">📸</a>
+          <a class="cs-icon" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener">🎵</a>
+          <a class="cs-icon" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener">▶️</a>
+          <a class="cs-icon" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener">👥</a>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ── CTA ── -->
-<section id="cta">
-  <div class="cta-bg"></div>
-  <div class="ctr">
-    <div class="cta-inner rev">
-      <div class="cta-eyebrow">Ready to Elevate Your Event?</div>
-      <h2 class="cta-h2">Your Event Deserves<br><em>Extraordinary</em> Drinks</h2>
-      <p class="cta-sub">Let's create something unforgettable together.</p>
-      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-        <a href="#contact" class="btn-gold">Start Planning Your Event</a>
-        <a href="tel:6462205276" style="display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border:1px solid var(--border);color:var(--cream-dim);text-decoration:none;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;transition:border-color 0.25s,color 0.25s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--cream-dim)'">Call (646) 220-5276</a>
-      </div>
-      <div class="cta-contact">
-        <a href="tel:6462205276">📞 (646) 220-5276</a>
-        <a href="mailto:Bartendersinfrontera@gmail.com">✉️ Bartendersinfrontera@gmail.com</a>
-        <span style="color:var(--muted);font-size:14px;">📍 All Five NYC Boroughs</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CONTACT ── -->
-<section id="contact" class="pad">
-  <div class="ctr">
-    <div class="contact-wrap">
-      <div class="contact-info">
-        <div class="s-label rev">Get in Touch</div>
-        <h2 class="s-h2 rev">Let's Make Your<br>Event <em>Legendary</em></h2>
-        <ul class="contact-detail-list">
-          <li class="cd-item rev">
-            <div class="cd-icon">📞</div>
-            <div>
-              <div class="cd-label">Phone / Text</div>
-              <div class="cd-val"><a href="tel:6462205276">(646) 220-5276</a></div>
-            </div>
-          </li>
-          <li class="cd-item rev">
-            <div class="cd-icon">✉️</div>
-            <div>
-              <div class="cd-label">Email</div>
-              <div class="cd-val"><a href="mailto:Bartendersinfrontera@gmail.com">Bartendersinfrontera@gmail.com</a></div>
-            </div>
-          </li>
-          <li class="cd-item rev">
-            <div class="cd-icon">📍</div>
-            <div>
-              <div class="cd-label">Service Area</div>
-              <div class="cd-val">All Five NYC Boroughs & Tri-State Area</div>
-            </div>
-          </li>
-          <li class="cd-item rev">
-            <div class="cd-icon">🕐</div>
-            <div>
-              <div class="cd-label">Response Time</div>
-              <div class="cd-val">Usually within a few hours</div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="contact-form-wrap rev-r">
-        <h3 class="form-h">Book Your Event</h3>
-        <form id="bform" action="mailto:Bartendersinfrontera@gmail.com" method="post" enctype="text/plain">
+    <div class="contact-right">
+      <div class="form-wrap rev-r">
+        <h3 class="form-h" data-en="Book Your Event" data-es="Reserva Tu Evento">Book Your Event</h3>
+        <form id="bform">
           <div class="f-row">
-            <div class="f-group">
-              <label class="f-label" for="fn">First Name</label>
-              <input type="text" id="fn" name="First Name" placeholder="Maria" required>
-            </div>
-            <div class="f-group">
-              <label class="f-label" for="ln">Last Name</label>
-              <input type="text" id="ln" name="Last Name" placeholder="Rodriguez" required>
-            </div>
-            <div class="f-group">
-              <label class="f-label" for="em">Email</label>
-              <input type="email" id="em" name="Email" placeholder="maria@example.com" required>
-            </div>
-            <div class="f-group">
-              <label class="f-label" for="ph">Phone</label>
-              <input type="tel" id="ph" name="Phone" placeholder="(646) 000-0000">
-            </div>
-            <div class="f-group">
-              <label class="f-label" for="et">Event Type</label>
-              <select id="et" name="Event Type">
-                <option value="">Select type</option>
-                <option>Wedding</option>
-                <option>Private Party</option>
-                <option>Corporate Event</option>
-                <option>Birthday</option>
-                <option>Bachelor/Bachelorette</option>
-                <option>Holiday Party</option>
-                <option>Workshop</option>
-                <option>Other</option>
+            <div class="f-g"><label class="f-label" data-en="First Name" data-es="Nombre">First Name</label><input type="text" name="First Name" placeholder="Maria" required></div>
+            <div class="f-g"><label class="f-label" data-en="Last Name" data-es="Apellido">Last Name</label><input type="text" name="Last Name" placeholder="Rodriguez" required></div>
+            <div class="f-g"><label class="f-label">Email</label><input type="email" name="Email" placeholder="maria@example.com" required></div>
+            <div class="f-g"><label class="f-label" data-en="Phone" data-es="Teléfono">Phone</label><input type="tel" name="Phone" placeholder="(646) 000-0000"></div>
+            <div class="f-g">
+              <label class="f-label" data-en="Event Type" data-es="Tipo de Evento">Event Type</label>
+              <select name="Event Type">
+                <option value="" data-en="Select type" data-es="Seleccionar tipo">Select type</option>
+                <option data-en="Wedding" data-es="Boda">Wedding</option>
+                <option data-en="Private Party" data-es="Fiesta Privada">Private Party</option>
+                <option data-en="Corporate Event" data-es="Evento Corporativo">Corporate Event</option>
+                <option data-en="Birthday" data-es="Cumpleaños">Birthday</option>
+                <option data-en="Bachelor/Bachelorette" data-es="Despedida de Soltero/a">Bachelor/Bachelorette</option>
+                <option data-en="Holiday Party" data-es="Fiesta Navideña">Holiday Party</option>
+                <option data-en="Workshop" data-es="Taller">Workshop</option>
+                <option data-en="Other" data-es="Otro">Other</option>
               </select>
             </div>
-            <div class="f-group">
-              <label class="f-label" for="ed">Event Date</label>
-              <input type="date" id="ed" name="Event Date">
-            </div>
-            <div class="f-group">
-              <label class="f-label" for="gc">Guest Count</label>
-              <input type="number" id="gc" name="Guests" placeholder="50" min="1">
-            </div>
-            <div class="f-group">
-              <label class="f-label" for="bo">Borough / Area</label>
-              <select id="bo" name="Area">
-                <option value="">Select area</option>
-                <option>Manhattan</option>
-                <option>Brooklyn</option>
-                <option>Queens</option>
-                <option>The Bronx</option>
-                <option>Staten Island</option>
-                <option>Long Island</option>
-                <option>New Jersey</option>
-                <option>Other</option>
+            <div class="f-g"><label class="f-label" data-en="Event Date" data-es="Fecha del Evento">Event Date</label><input type="date" name="Event Date"></div>
+            <div class="f-g"><label class="f-label" data-en="Guest Count" data-es="Número de Invitados">Guest Count</label><input type="number" name="Guests" placeholder="50" min="1"></div>
+            <div class="f-g">
+              <label class="f-label" data-en="Borough / Area" data-es="Condado / Área">Borough / Area</label>
+              <select name="Area">
+                <option value="" data-en="Select area" data-es="Seleccionar área">Select area</option>
+                <option>Manhattan</option><option>Brooklyn</option><option>Queens</option>
+                <option>The Bronx</option><option>Staten Island</option>
+                <option data-en="Long Island" data-es="Long Island">Long Island</option>
+                <option data-en="New Jersey" data-es="Nueva Jersey">New Jersey</option>
+                <option data-en="Other" data-es="Otro">Other</option>
               </select>
             </div>
-            <div class="f-group full">
-              <label class="f-label" for="msg">Tell Us About Your Event</label>
-              <textarea id="msg" name="Message" placeholder="Share your vision, venue, special requests..."></textarea>
-            </div>
+            <div class="f-g full"><label class="f-label" data-en="Tell Us About Your Event" data-es="Cuéntanos Sobre Tu Evento">Tell Us About Your Event</label><textarea name="Message" placeholder="Share your vision, venue, special requests..." data-es-placeholder="Comparte tu visión, lugar y solicitudes especiales..."></textarea></div>
           </div>
-          <button type="submit" class="f-submit">Send Inquiry →</button>
+          <button type="submit" class="f-submit" data-en="Send Inquiry →" data-es="Enviar Consulta →">Send Inquiry →</button>
         </form>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── FOOTER ── -->
-<footer>
-  <div class="ctr">
-    <div class="foot-top">
-      <div>
-        <div class="foot-brand-name">Bartenders<em>in</em>Frontera</div>
-        <p class="foot-brand-desc">Premium mobile bartending and cocktail experiences for every occasion across New York City and the Tri-State Area.</p>
-        <div class="foot-socials">
-          <a class="foot-social" href="https://www.instagram.com/bartendersinfrontera" target="_blank" rel="noopener">📸</a>
-          <a class="foot-social" href="https://www.tiktok.com/@bartendersinfronterany" target="_blank" rel="noopener">🎵</a>
-          <a class="foot-social" href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank" rel="noopener">👥</a>
-          <a class="foot-social" href="https://youtube.com/@bartendersinfronterany" target="_blank" rel="noopener">▶️</a>
-        </div>
-      </div>
-      <div class="foot-col">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="#services">Weddings</a></li>
-          <li><a href="#services">Private Parties</a></li>
-          <li><a href="#services">Corporate Events</a></li>
-          <li><a href="#services">Mobile Bar</a></li>
-          <li><a href="#services">Custom Menus</a></li>
-          <li><a href="#services">Workshops</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <h4>Follow</h4>
-        <ul>
-          <li><a href="https://www.instagram.com/bartendersinfrontera" target="_blank">Instagram</a></li>
-          <li><a href="https://www.tiktok.com/@bartendersinfronterany" target="_blank">TikTok</a></li>
-          <li><a href="https://www.facebook.com/share/1H7JwHtSof/" target="_blank">Facebook</a></li>
-          <li><a href="https://youtube.com/@bartendersinfronterany" target="_blank">YouTube</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="tel:6462205276">(646) 220-5276</a></li>
-          <li><a href="mailto:Bartendersinfrontera@gmail.com">Email Us</a></li>
-          <li><a href="#contact">Book Now</a></li>
-          <li><a href="#about">About Us</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <p>© 2025 Bartenders in Frontera · All rights reserved.</p>
-      <p>NYC · <a href="mailto:Bartendersinfrontera@gmail.com">Bartendersinfrontera@gmail.com</a></p>
-    </div>
-  </div>
-</footer>
+</div><!-- /pages-wrap -->
 
 <script>
-  // ── CURSOR ──
-  const cur = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx=0,my=0,rx=0,ry=0;
-  window.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-  (function lerp(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(lerp); })();
-  document.querySelectorAll('a,button').forEach(el=>{ el.addEventListener('mouseenter',()=>{ ring.style.width='56px'; ring.style.height='56px'; }); el.addEventListener('mouseleave',()=>{ ring.style.width='36px'; ring.style.height='36px'; }); });
+// ══════════════════════════════
+// STATE
+// ══════════════════════════════
+let currentPage = 0;
+let lang = 'es';
+let musicPlaying = false;
+const audio = document.getElementById('audio');
+const PAGES = ['page-home','page-about','page-services','page-menu','page-gallery','page-contact'];
 
-  // ── NAV ──
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll',()=>nav.classList.toggle('stuck', window.scrollY>60));
+// ══════════════════════════════
+// CURSOR
+// ══════════════════════════════
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function lerp(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;curRing.style.left=rx+'px';curRing.style.top=ry+'px';requestAnimationFrame(lerp);})();
+document.addEventListener('mousedown',()=>{cur.style.width='14px';cur.style.height='14px';});
+document.addEventListener('mouseup',()=>{cur.style.width='8px';cur.style.height='8px';});
 
-  // ── GSAP HERO ──
-  gsap.registerPlugin(ScrollTrigger);
-  gsap.to('#ey',{opacity:1,y:0,duration:1,delay:0.4,ease:'power3.out'});
-  gsap.from('.hero-h1 .line span',{yPercent:110,duration:1.1,stagger:0.1,delay:0.7,ease:'power3.out'});
-  gsap.to('#hh1',{opacity:1,duration:0.01,delay:0.7});
-  gsap.to('#hdesc',{opacity:1,y:0,duration:1,delay:1.2,ease:'power3.out'});
-  gsap.from('#hdesc',{y:24,duration:1,delay:1.2,ease:'power3.out'});
-  gsap.to('#hcta',{opacity:1,duration:1,delay:1.5,ease:'power3.out'});
-  gsap.from('#hcta',{y:20,duration:1,delay:1.5,ease:'power3.out'});
-  gsap.to('#hart',{opacity:1,scale:1,duration:1.5,delay:0.8,ease:'power3.out'});
+// ══════════════════════════════
+// PAGE NAVIGATION
+// ══════════════════════════════
+function goTo(idx){
+  if(idx===currentPage)return;
+  const prev=document.getElementById(PAGES[currentPage]);
+  const next=document.getElementById(PAGES[idx]);
+  prev.classList.remove('active');
+  prev.classList.add(idx>currentPage?'exit-up':'exit-down');
+  setTimeout(()=>prev.classList.remove('exit-up','exit-down'),700);
+  currentPage=idx;
+  next.classList.add('active');
+  next.scrollTop=0;
+  document.querySelectorAll('.nav-link').forEach(b=>b.classList.toggle('active',+b.dataset.page===idx));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  document.querySelectorAll('.mobile-nav-link').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.getElementById('nav').classList.toggle('dark',idx!==0);
+  // Darken video overlay on non-home pages
+  document.body.classList.toggle('page-deep',idx!==0);
+  setTimeout(()=>triggerReveals(next),100);
+  if(idx===0)animateHome();
+}
 
-  // ── HERO PARALLAX ──
-  window.addEventListener('scroll',()=>{
-    const y=window.scrollY;
-    if(y<window.innerHeight){ const hl=document.querySelector('.hero-left'); if(hl){ hl.style.transform=`translateY(${y*0.2}px)`; hl.style.opacity=1-(y/(window.innerHeight*0.8)); }}
+// ══════════════════════════════
+// WHEEL / SCROLL NAVIGATION
+// ══════════════════════════════
+let wheelLock=false;
+window.addEventListener('wheel',e=>{
+  if(wheelLock)return;
+  const activePage=document.getElementById(PAGES[currentPage]);
+  const atTop=activePage.scrollTop<=2;
+  const atBottom=activePage.scrollTop+activePage.clientHeight>=activePage.scrollHeight-2;
+  const noScroll=activePage.scrollHeight<=activePage.clientHeight+4;
+  const goNext=e.deltaY>0&&(atBottom||noScroll);
+  const goPrev=e.deltaY<0&&(atTop||noScroll);
+  if(!goNext&&!goPrev)return;
+  wheelLock=true;
+  setTimeout(()=>{wheelLock=false;},900);
+  if(goNext)goTo(Math.min(currentPage+1,PAGES.length-1));
+  else goTo(Math.max(currentPage-1,0));
+},{passive:true});
+
+// ══════════════════════════════
+// REVEAL ANIMATIONS
+// ══════════════════════════════
+function triggerReveals(page){
+  page.querySelectorAll('.rev,.rev-l,.rev-r').forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('vis'),i*80);
   });
+}
 
-  // ── SCROLL REVEAL ──
-  const io=new IntersectionObserver(entries=>{ entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'),i*60); io.unobserve(e.target); }}); },{threshold:0.1});
-  document.querySelectorAll('.rev,.rev-l,.rev-r').forEach(el=>io.observe(el));
+// ══════════════════════════════
+// HOME ANIMATIONS (GSAP)
+// ══════════════════════════════
+function animateHome(){
+  const lines=document.querySelectorAll('.home-h1 .line span');
+  gsap.to(lines,{yPercent:0,duration:1.1,stagger:.12,ease:'power3.out',delay:.3});
+  gsap.to('#h-eyebrow',{opacity:1,duration:.8,delay:.2});
+  gsap.to('#h-sub',{opacity:1,y:0,duration:.9,delay:1.0,ease:'power3.out'});
+  gsap.to('#h-ctas',{opacity:1,y:0,duration:.9,delay:1.2,ease:'power3.out'});
+  gsap.from('#h-ctas',{y:20,duration:.9,delay:1.2});
+}
 
-  // ── COUNTER ──
-  const cio=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.querySelectorAll('[data-target]').forEach(el=>{ const t=+el.dataset.target; let s=0; const d=1600; const step=ts=>{ if(!s)s=ts; const p=Math.min((ts-s)/d,1); const v=1-Math.pow(1-p,3); el.textContent=Math.floor(v*t)+(t>=1000?'+':t===5?'':'+'); if(p<1)requestAnimationFrame(step); }; requestAnimationFrame(step); }); cio.unobserve(e.target); }});
-  },{threshold:0.4});
-  const sr=document.querySelector('.about-stats-row'); if(sr)cio.observe(sr);
+// ══════════════════════════════
+// LANGUAGE TOGGLE
+// ══════════════════════════════
+function toggleLang(){
+  lang=lang==='en'?'es':'en';
+  const btn=document.getElementById('langBtn');
+  btn.textContent=lang==='en'?'ES':'EN';
+  btn.classList.toggle('active-lang',lang==='es');
+  applyLang();
+}
 
-  // ── PROCESS STEPS ──
-  document.querySelectorAll('.p-step').forEach((step,i)=>{
-    const sio=new IntersectionObserver(e=>{ if(e[0].isIntersecting){ step.classList.add('active'); sio.unobserve(step); }},{threshold:0.6});
-    sio.observe(step);
+function applyLang(){
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    const val=el.getAttribute('data-'+lang);
+    if(!val)return;
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA'){el.placeholder=val;return;}
+    if(el.tagName==='OPTION'){el.textContent=val;return;}
+    // Handle innerHTML (for em tags)
+    if(val.includes('<em>')||val.includes('<br>')){el.innerHTML=val;}
+    else{el.textContent=val;}
   });
-
-  // ── SMOOTH SCROLL ──
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click',e=>{ e.preventDefault(); const t=document.querySelector(a.getAttribute('href')); if(t)t.scrollIntoView({behavior:'smooth',block:'start'}); }); });
-
-  // ── FORM ──
-  document.getElementById('bform').addEventListener('submit',function(e){
-    e.preventDefault();
-    const btn=this.querySelector('.f-submit');
-    const fd=new FormData(this);
-    let body='';
-    fd.forEach((v,k)=>{ if(v)body+=`${k}: ${v}\n`; });
-    window.location.href=`mailto:Bartendersinfrontera@gmail.com?subject=Event%20Inquiry&body=${encodeURIComponent(body)}`;
-    btn.textContent='✓ Opening your email client...';
-    btn.style.background='#2d5a2d';
+  // Hero h1 lines
+  document.querySelectorAll('.home-h1 .line').forEach(line=>{
+    const sp=line.querySelector('span');
+    const val=line.getAttribute('data-'+lang+'-line');
+    if(val&&sp){
+      // Preserve em if gold
+      if(val.startsWith('<em>')||val.endsWith('</em>')){sp.innerHTML=val;}
+      else{sp.textContent=val;}
+    }
   });
-
-  // ── HAMBURGER ──
-  document.getElementById('ham').addEventListener('click',()=>{
-    const nl=document.querySelector('.nav-links');
-    const open=nl.style.display==='flex';
-    Object.assign(nl.style,{display:open?'':'flex',flexDirection:'column',position:'fixed',top:'60px',left:'0',right:'0',background:'rgba(11,9,7,0.97)',padding:'32px 48px',gap:'24px',zIndex:'199',borderBottom:'1px solid rgba(200,146,42,0.15)'});
-    if(open)nl.style.display='none';
+  // Textarea placeholders
+  document.querySelectorAll('textarea[data-es-placeholder]').forEach(t=>{
+    t.placeholder=lang==='es'?t.getAttribute('data-es-placeholder'):'Share your vision, venue, special requests...';
   });
+}
+
+// ══════════════════════════════
+// MUSIC
+// ══════════════════════════════
+function toggleMusic(){
+  if(musicPlaying){
+    audio.pause();
+    musicPlaying=false;
+    document.getElementById('musicBars').classList.add('paused');
+    document.getElementById('musicLabel').textContent=lang==='en'?'Music':'Música';
+  } else {
+    audio.volume=0.25;
+    audio.play().then(()=>{
+      musicPlaying=true;
+      document.getElementById('musicBars').classList.remove('paused');
+      document.getElementById('musicLabel').textContent=lang==='en'?'Playing':'Sonando';
+    }).catch(()=>{
+      // Autoplay blocked — show hint
+      document.getElementById('musicLabel').textContent='▶ Play';
+    });
+  }
+}
+
+// ══════════════════════════════
+// COCKTAIL EMOJI HOVER
+// ══════════════════════════════
+function setEmoji(e){
+  const el=document.getElementById('cocktailEmoji');
+  if(el){el.textContent=e;}
+}
+
+// ══════════════════════════════
+// COUNTER ANIMATION
+// ══════════════════════════════
+function animateCounters(){
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    if(el.dataset.animated)return;
+    el.dataset.animated='1';
+    const target=+el.dataset.target;
+    const suffix=target>=1000?'K+':target>5?'+':'';
+    const displayTarget=target>=1000?target/1000:target;
+    let start=null;
+    const step=ts=>{
+      if(!start)start=ts;
+      const p=Math.min((ts-start)/1500,1);
+      const v=1-Math.pow(1-p,3);
+      el.textContent=Math.floor(v*displayTarget)+suffix;
+      if(p<1)requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+
+// ══════════════════════════════
+// MOBILE NAV
+// ══════════════════════════════
+function toggleMobileNav(){
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+// ══════════════════════════════
+// KEYBOARD NAV
+// ══════════════════════════════
+window.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')goTo(Math.min(currentPage+1,PAGES.length-1));
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')goTo(Math.max(currentPage-1,0));
+});
+
+// ══════════════════════════════
+// TOUCH/SWIPE
+// ══════════════════════════════
+let touchStartY=0,touchStartX=0;
+document.addEventListener('touchstart',e=>{touchStartY=e.touches[0].clientY;touchStartX=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dy=touchStartY-e.changedTouches[0].clientY;
+  const dx=touchStartX-e.changedTouches[0].clientX;
+  if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>60){
+    if(dy>0)goTo(Math.min(currentPage+1,PAGES.length-1));
+    else goTo(Math.max(currentPage-1,0));
+  }
+},{passive:true});
+
+// ══════════════════════════════
+// FORM SUBMIT
+// ══════════════════════════════
+document.getElementById('bform').addEventListener('submit',function(e){
+  e.preventDefault();
+  const btn=this.querySelector('.f-submit');
+  const fd=new FormData(this);
+  let body='';
+  fd.forEach((v,k)=>{if(v)body+=`${k}: ${v}\n`;});
+  window.location.href=`mailto:Bartendersinfrontera@gmail.com?subject=Event%20Inquiry&body=${encodeURIComponent(body)}`;
+  btn.textContent=lang==='en'?'✓ Opening your email...':'✓ Abriendo tu correo...';
+  btn.style.background='#2d5a2d';
+});
+
+// ══════════════════════════════
+// INIT
+// ══════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  // Apply Spanish by default
+  const langBtn=document.getElementById('langBtn');
+  langBtn.textContent='EN';
+  langBtn.classList.add('active-lang');
+  applyLang();
+
+  animateHome();
+
+  // Watch for about page counter
+  const aboutPage=document.getElementById('page-about');
+  const observer=new MutationObserver(()=>{
+    if(aboutPage.classList.contains('active'))animateCounters();
+  });
+  observer.observe(aboutPage,{attributes:true,attributeFilter:['class']});
+
+  document.getElementById('nav').classList.remove('dark');
+
+  // Autoplay music on first user interaction (browsers require gesture)
+  let musicStarted=false;
+  function startMusicOnce(){
+    if(musicStarted)return;
+    musicStarted=true;
+    audio.volume=0.22;
+    audio.play().then(()=>{
+      musicPlaying=true;
+      document.getElementById('musicBars').classList.remove('paused');
+      document.getElementById('musicLabel').textContent='Sonando';
+    }).catch(()=>{});
+    document.removeEventListener('click',startMusicOnce);
+    document.removeEventListener('touchstart',startMusicOnce);
+    document.removeEventListener('keydown',startMusicOnce);
+  }
+  document.addEventListener('click',startMusicOnce,{once:true});
+  document.addEventListener('touchstart',startMusicOnce,{once:true,passive:true});
+  document.addEventListener('keydown',startMusicOnce,{once:true});
+});
 </script>
 </body>
 </html>
