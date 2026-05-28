@@ -295,14 +295,11 @@ textarea{resize:vertical;min-height:100px}
 <!-- Page loader flash -->
 <div class="page-loader" id="loader"><div class="loader-line" id="loaderLine"></div></div>
 
-<!-- Hidden YouTube music player — Salsa/Latin no-copyright track -->
-<div style="position:fixed;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;top:-9999px;left:-9999px" aria-hidden="true">
-  <iframe id="musicYT"
-    src="https://www.youtube.com/embed/0h7PMkiiqoA?autoplay=1&mute=1&loop=1&playlist=0h7PMkiiqoA&controls=0&enablejsapi=1"
-    allow="autoplay"
-    style="width:1px;height:1px">
-  </iframe>
-</div>
+<!-- Local Latin music — no YouTube dependency -->
+<audio id="audio" loop preload="none">
+  <source src="music/latin-party.mp3" type="audio/mpeg">
+  <source src="music/latin-cumbia.mp3" type="audio/mpeg">
+</audio>
 
 <!-- ══════════ NAV ══════════ -->
 <nav id="nav">
@@ -677,11 +674,8 @@ textarea{resize:vertical;min-height:100px}
 let currentPage = 0;
 let lang = 'es';
 let musicPlaying = false;
+const audio = document.getElementById('audio');
 const PAGES = ['page-home','page-about','page-services','page-menu','page-gallery','page-contact'];
-function ytCmd(fn,args){
-  const f=document.getElementById('musicYT');
-  if(f)f.contentWindow.postMessage(JSON.stringify({event:'command',func:fn,args:args||[]}),'*');
-}
 
 // ══════════════════════════════
 // CURSOR
@@ -799,16 +793,19 @@ function applyLang(){
 // ══════════════════════════════
 function toggleMusic(){
   if(musicPlaying){
-    ytCmd('mute');
+    audio.pause();
     musicPlaying=false;
     document.getElementById('musicBars').classList.add('paused');
     document.getElementById('musicLabel').textContent=lang==='en'?'Music':'Música';
   } else {
-    ytCmd('unMute');
-    ytCmd('setVolume',[28]);
-    musicPlaying=true;
-    document.getElementById('musicBars').classList.remove('paused');
-    document.getElementById('musicLabel').textContent=lang==='en'?'Playing':'Sonando';
+    audio.volume=0.28;
+    audio.play().then(()=>{
+      musicPlaying=true;
+      document.getElementById('musicBars').classList.remove('paused');
+      document.getElementById('musicLabel').textContent=lang==='en'?'Playing':'Sonando';
+    }).catch(()=>{
+      document.getElementById('musicLabel').textContent='▶ Tap';
+    });
   }
 }
 
@@ -906,16 +903,17 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   document.getElementById('nav').classList.remove('dark');
 
-  // Autoplay music on first user interaction (browsers require gesture for unmute)
+  // Autoplay music on first user interaction
   let musicStarted=false;
   function startMusicOnce(){
     if(musicStarted)return;
     musicStarted=true;
-    ytCmd('unMute');
-    ytCmd('setVolume',[28]);
-    musicPlaying=true;
-    document.getElementById('musicBars').classList.remove('paused');
-    document.getElementById('musicLabel').textContent='Sonando';
+    audio.volume=0.28;
+    audio.play().then(()=>{
+      musicPlaying=true;
+      document.getElementById('musicBars').classList.remove('paused');
+      document.getElementById('musicLabel').textContent=lang==='en'?'Playing':'Sonando';
+    }).catch(()=>{});
   }
   document.addEventListener('click',startMusicOnce,{once:true});
   document.addEventListener('touchstart',startMusicOnce,{once:true,passive:true});
