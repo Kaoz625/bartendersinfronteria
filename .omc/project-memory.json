@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1780011497499,
+  "projectRoot": "/Users/markususche/Sites/bartendersinfronteria",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {},
+  "hotPaths": [
+    {
+      "path": "index.html",
+      "accessCount": 29,
+      "lastAccessed": 1780013848080,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
