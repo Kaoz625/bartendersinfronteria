@@ -70,7 +70,7 @@ nav.dark{background:rgba(9,7,10,.9);backdrop-filter:blur(20px);border-bottom:1px
 /* ── GLOBAL VIDEO BG ── */
 .global-video-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;transition:opacity .8s}
 .global-video-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,7,10,.3) 0%,rgba(9,7,10,.5) 50%,rgba(9,7,10,.92) 100%);transition:background .8s}
-.global-video-bg iframe{position:absolute;top:50%;left:50%;width:180vw;height:180vh;transform:translate(-50%,-50%);pointer-events:none;border:none}
+.global-video-bg video{position:absolute;top:50%;left:50%;width:180vw;height:180vh;transform:translate(-50%,-50%);object-fit:cover;pointer-events:none}
 body.page-deep .global-video-bg::after{background:rgba(9,7,10,.78)}
 
 /* ════════════════════════
@@ -346,13 +346,11 @@ textarea{resize:vertical;min-height:100px}
   <div class="dot" onclick="goTo(5)" title="Contact"></div>
 </div>
 
-<!-- Global video background — fixed, always behind all pages -->
+<!-- Global video background — local file, no YouTube dependency -->
 <div class="global-video-bg" id="globalVideoBg">
-  <iframe
-    src="https://www.youtube.com/embed/9cJ3frvZwQM?autoplay=1&mute=1&loop=1&playlist=9cJ3frvZwQM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
-    allow="autoplay; fullscreen"
-    allowfullscreen>
-  </iframe>
+  <video autoplay muted loop playsinline>
+    <source src="video/bg-loop.mp4" type="video/mp4">
+  </video>
 </div>
 
 <!-- ══════════════════════════════
